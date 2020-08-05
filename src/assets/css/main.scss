@@ -1,0 +1,153 @@
+@import '@/assets/css/ThemColors.scss';
+@import 'node_modules/bootstrap/scss/bootstrap';
+@import 'node_modules/bootstrap-vue/src/index.scss';
+
+body {
+    height: 100%;
+}
+
+html {
+    height: 100%;
+    box-sizing: border-box;
+}
+
+#app {
+    height: 100%;
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+}
+
+*:focus,
+*:active {
+    outline: none;
+}
+
+a:focus,
+a:active {
+    outline: none;
+}
+
+a,
+a:focus,
+a:hover {
+    cursor: pointer;
+    color: inherit;
+    text-decoration: none;
+}
+
+div:focus {
+    outline: none;
+}
+
+.clearfix {
+    &:after {
+        visibility: hidden;
+        display: block;
+        font-size: 0;
+        content: " ";
+        clear: both;
+        height: 0;
+    }
+}
+
+img {
+    border: none;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+.content {
+    display: flex;
+    min-height: 0px;
+    flex: 1 1 auto;
+    // overflow: hidden;
+}
+
+.head-bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+
+    .title {
+        margin: 0;
+    }
+
+    .config {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+}
+
+#head-collapse {
+    z-index: 9999;
+    border: 2px solid #000000;
+}
+
+#sidebar {
+    min-width: 250px;
+    max-width: 250px;
+    flex-shrink: 0;
+    overflow: auto;
+    background-color: #ffffff;
+    color: $dark-font;
+    transition: all 0.3s;
+    border-right: 2px solid #000000;
+}
+
+#sidebar.active {
+    margin-left: -250px;
+}
+
+.swiper-pagination-bullet-active {
+    background: #f17f7f !important;
+}
+
+.btn-pink {
+    color: #ffffff;
+    background-color: #f17f7f;
+    border-color: #e69494;
+}
+
+.btn-pink:hover {
+    color: #ffffff;
+    background-color: #d15959;
+    border-color: #e69494;
+}
+
+.btn-pink:not(:disabled):not(.disabled):active, .btn-pink:not(:disabled):not(.disabled).active, .show > .btn-pink.dropdown-toggle {
+    color: #ffffff;
+    background-color: #f17f7f;
+    border-color: #e69494;
+}
+
+@media (max-width: 1024px) {
+    #sidebar {
+        margin-left: -250px;
+        position: absolute;
+        height: calc(100% - 60px);
+        z-index: 9999;
+    }
+    
+    #sidebar.active {
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .title {
+        font-size: 1.2rem;
+    }
+}
