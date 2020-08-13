@@ -1,6 +1,5 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Layout from "@/components/layout/main.vue";
 
 Vue.use(VueRouter);
 
@@ -11,14 +10,17 @@ const routes = [
   },
   {
     path: "/main",
-    component: Layout,
-    children: [
-      {
-        path: "/:tagName?",
-        name: "content",
-        component: () => import("@/views/content/index.vue")
-      }
-    ]
+    name: "main",
+    component: () => import("@/views/index.vue")
+  },
+  {
+    path: "/sample",
+    name: "sample",
+    component: () => import("@/views/sample/sample.vue"),
+    // props: { name: 'sample' }
+    props: route => ({
+      ...route.params
+    })
   }
 ];
 

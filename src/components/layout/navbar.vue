@@ -1,10 +1,11 @@
 <template>
-  <div class="navbar" :class="{ 'p-0': sidebarTogglable }">
-    <b-button class="ml-2" @click="toggleSidebar" v-if="sidebarTogglable">
-      <font-awesome-icon :icon="['fas', 'bars']" />
-    </b-button>
-    <div class="head-bar mr-2">
-      <h2 class="title">Material Ball</h2>
+  <div class="navbar">
+    <div class="head-bar">
+      <div class="main-panel">
+        <h2 class="title text-no-wrap mr-2">
+          <router-link to="/main">Yaw Liamy VML</router-link>
+        </h2>
+      </div>
       <!-- <span
         v-if="sidebarTogglable"
         class="config mx-3 h-100"
@@ -15,7 +16,14 @@
         <font-awesome-icon :icon="['fas', 'cog']" />
       </span> -->
     </div>
-
+    <b-button class="mr-2" variant="primary" @click="toggleSidebar" v-if="sidebarTogglable">
+      <font-awesome-icon :icon="['fas', 'bars']" size="lg" />
+    </b-button>
+    <!-- <div class="tool-area" v-if="sidebarTogglable">
+      <b-button class="mr-2 toggle-btn" @click="toggleSidebar">
+        <font-awesome-icon :icon="['fas', 'bars']" />
+      </b-button>
+    </div> -->
     <!-- <b-collapse v-model="headCollapse" id="head-collapse" class="w-100">
       <b-card>
         <div class="search-area">
@@ -59,11 +67,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@/assets/css/ThemColors.scss";
+
 .navbar {
-  background-color: #ffffff;
-  color: #585858;
-  min-height: 60px;
-  max-height: 60px;
-  border-bottom: 2px solid #000000;
+  flex-wrap: nowrap;
+}
+
+.tool-area {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  height: 7rem;
+  width: 16rem;
+  background-color: $secondary;
+}
+
+.toggle-btn {
+  height: 36px;
 }
 </style>

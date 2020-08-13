@@ -3,13 +3,13 @@
     class="carousel-container"
     @mouseover="isHover = true"
     @mouseleave="isHover = false"
-    @click.stop="openBox"
+    @click.stop="displaySample"
   >
     <b-carousel
       v-model="slideIndex"
       :interval="countInterval"
       :indicators="isHover"
-      background="#fdfdfd"
+      background="rgba(0, 0, 0, 0.1)"
       no-hover-pause
     >
       <b-carousel-slide v-for="(img, index) in imgList" :key="index">
@@ -41,18 +41,11 @@ export default {
     };
   },
   watch: {
-    // data: {
-    //   handler() {
-    //     console.log(this.imgList);
-    //     this.imgList = [
-    //       `http://182.52.70.198:8080/MaterialImg/${this.data.SampleNo}/${this.data.SampleNo}-01.png`,
-    //       `http://182.52.70.198:8080/MaterialImg/${this.data.SampleNo}/${this.data.SampleNo}-02.png`,
-    //       `http://182.52.70.198:8080/MaterialImg/${this.data.SampleNo}/${this.data.SampleNo}-03.png`
-    //     ];
-    //     console.log(this.imgList);
-    //   },
-    //   deep: true
-    // }
+    isHover(value) {
+      if (value === false) {
+        this.slideIndex = 0;
+      }
+    }
   },
   computed: {
     countInterval() {
@@ -67,9 +60,10 @@ export default {
     }
   },
   methods: {
-    openBox() {
+    displaySample() {
       this.isHover = false;
-      this.$emit("openBox");
+
+      this.$emit("displaySample");
     },
     handleImgDisplay(e) {
       e.target.src = "http://182.52.70.198:8080/MaterialImg/ImageNotFound.png";

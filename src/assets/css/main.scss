@@ -1,9 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,500;0,700;1,300;1,500;1,700&family=Roboto&display=swap');
 @import '@/assets/css/ThemColors.scss';
 @import 'node_modules/bootstrap/scss/bootstrap';
 @import 'node_modules/bootstrap-vue/src/index.scss';
 
 body {
     height: 100%;
+    font-family: 'Cormorant Garamond', 'Roboto', sans-serif, serif;
 }
 
 html {
@@ -58,38 +60,80 @@ img {
     border: none;
 }
 
+.not-collapsed {
+    .when-close {
+      display: none;
+    }
+}
+  
+.collapsed {
+    .when-open {
+      display: none;
+    }
+}
+
 .wrapper {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     height: 100%;
     width: 100%;
     overflow: hidden;
+    background-color: $primary;
+    position: relative;
 }
 
 .content {
     display: flex;
+    flex-direction: column;
     min-height: 0px;
     flex: 1 1 auto;
+    width: 100%;
     // overflow: hidden;
 }
 
-.head-bar {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
+.navbar {
+    color: $secondary;
+    min-height: 7rem;
+    max-height: 7rem;
+    border-bottom: 2px solid $secondary;
+    padding: 0;
 
-    .title {
-        margin: 0;
-    }
-
-    .config {
+    .head-bar {
         display: flex;
-        flex-direction: column;
-        justify-content: center;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        overflow: hidden;
+        height: 100%;
+        width: 100%;
+
+        .main-panel {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 0 1rem;
+            flex: 1;
+        }
+
+        .title {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            border: 2px solid $secondary;
+            padding: .6rem;
+            height: 5rem;
+        }
+    
+        .config {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
     }
 }
+
 
 #head-collapse {
     z-index: 9999;
@@ -97,22 +141,59 @@ img {
 }
 
 #sidebar {
-    min-width: 250px;
-    max-width: 250px;
+    min-width: 16rem;
+    max-width: 16rem;
+    height: 100%;
     flex-shrink: 0;
-    overflow: auto;
-    background-color: #ffffff;
-    color: $dark-font;
+    overflow: hidden;
+    background-color: $secondary;
+    color: #000000;
+    font-weight: 700;
+    z-index: 9999;
     transition: all 0.3s;
-    border-right: 2px solid #000000;
+
+    .sidebar-head {
+        height: 7rem;
+        border-bottom: 2px solid #3b3b3b;
+      
+        .input-group-text {
+          background-color: #3b3b3b;
+          color: #ffffff;
+          border: 1px solid #3b3b3b;
+        }
+    }
+    
+    .sidebar-content {
+        // height: calc(100% - 3rem);
+        height: 100%;
+        overflow-y: auto;
+    
+        .sidebar-content-catagory {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 0.4rem 1rem;
+            color: #585858;
+            cursor: default;
+        
+            .sidebar-content-catagory-head {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                width: 100%;
+            }
+        }
+    }
 }
 
-#sidebar.active {
-    margin-left: -250px;
+.text-no-wrap {
+    white-space: nowrap;
 }
 
 .swiper-pagination-bullet-active {
-    background: #f17f7f !important;
+    background: $secondary !important;
 }
 
 .btn-pink {
@@ -135,14 +216,12 @@ img {
 
 @media (max-width: 1024px) {
     #sidebar {
-        margin-left: -250px;
         position: absolute;
-        height: calc(100% - 60px);
-        z-index: 9999;
-    }
-    
-    #sidebar.active {
-        margin-left: 0;
+        right: -16rem;
+
+        &.active {
+            right: 0;
+        }
     }
 }
 

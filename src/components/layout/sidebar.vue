@@ -1,54 +1,42 @@
 <template>
   <div id="sidebar" :class="{ active: sidebarActive }">
-    <div class="px-3 py-2">
-      <b-list-group class="custome-group-list">
-        <b-list-group-item
-          class="custome-group-list-item"
-          v-for="(tag, index) in tagList"
-          :key="index"
-          :to="{ name: 'content', params: { tagName: tag.TagName.trim() } }"
-          :class="{ selected: selectedTag === tag.TagName }"
-          @click="toggleSidebar(tag.TagName)"
-        >
-          <span class="item-name">{{ tag.TagName }}</span>
-          <span class="item-count">{{ tag.TagCount }}</span>
-        </b-list-group-item>
-      </b-list-group>
+    <div class="sidebar-head p-2">
+      <!-- <b-button class="mr-2" v-if="!sidebarTogglable">
+        <font-awesome-icon :icon="['fas', 'bars']" />
+      </b-button> -->
+      <div class="block-container h-50">
+        <b-button class="mr-2">
+          <font-awesome-icon :icon="['fas', 'user']" size="lg" />
+        </b-button>
+      </div>
+      <div class="block-container h-50 px-2">
+        <SearchBar @closeLayer="closeLayer"></SearchBar>
+      </div>
     </div>
+    <SidebarContent></SidebarContent>
   </div>
 </template>
 
 <script>
+import SearchBar from "@/components/SearchBar.vue";
+import SidebarContent from "@/components/layout/SidebarContent.vue";
+
 export default {
   name: "sidebar",
+  components: {
+    SearchBar,
+    SidebarContent
+  },
   props: {
-    sidebarActive: Boolean
+    sidebarActive: Boolean,
+    sidebarTogglable: Boolean
   },
   data() {
-    return {
-      tagList: [],
-      selectedTag: ""
-    };
-  },
-  created() {
-    this.getList();
+    return {};
   },
   methods: {
-    getList() {
-      const api = `${process.env.VUE_APP_BASE_API}/api/TagList/GetList`;
-
-      this.$http
-        .get(api)
-        .then(Response => {
-          this.tagList = Response.data.Resource;
-        })
-        .catch(e => {
-          console.log(e);
-        });
-    },
-    toggleSidebar(tag) {
-      this.selectedTag = tag;
-      this.$emit("toggleSidebar");
+    closeLayer() {
+      this.$emit("closeLayer");
     }
   }
 };
@@ -59,7 +47,7 @@ export default {
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: #ffffff #000000;
+  scrollbar-color: #f2f2f2 #000000;
 }
 
 *::-webkit-scrollbar {
@@ -67,45 +55,27 @@ export default {
 }
 
 *::-webkit-scrollbar-track {
-  background: #ffffff;
+  background: #f2f2f2;
 }
 
 *::-webkit-scrollbar-thumb {
   background-color: #000000;
   border-radius: 20px;
-  border: 3px solid #ffffff;
+  border: 3px solid #f2f2f2;
 }
 
-.custome-group-list {
-  .custome-group-list-item {
-    background-color: transparent;
-    display: flex;
-    padding: 0.5rem;
-    color: $dark-font;
-    border: none;
-    cursor: default;
+.btn:focus,
+.btn.focus {
+  outline: 0;
+  box-shadow: none;
+}
 
-    &:hover {
-      background-color: $pink;
-      color: #ffffff;
-    }
+.block-container {
+  display: flex;
+  align-items: center;
+}
 
-    .item-name {
-      width: 80%;
-      text-align: left;
-      cursor: pointer;
-    }
-
-    .item-count {
-      width: 20%;
-      text-align: right;
-      cursor: pointer;
-    }
-
-    &.selected {
-      background-color: $pink;
-      color: #ffffff;
-    }
-  }
+.tag-search-area {
+  padding: 0.4rem;
 }
 </style>

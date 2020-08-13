@@ -1,145 +1,30 @@
 <template>
   <div class="sample-content js-enabled">
-    <Carousel :data="data" @openBox="openBox"></Carousel>
-    <div class="custome-carousel-caption">
+    <Carousel :data="data" @displaySample="displaySample"></Carousel>
+    <div class="custome-carousel-caption" @click="displaySample">
       {{ data.ItemNo }}
       <!-- <a ref="download" :href="downloadUrl" :download="downloadFileName">download</a> -->
       <!-- <input type="button" @click="download" value="download" /> -->
     </div>
-
-    <b-modal
-      ref="detailModal"
-      size="xl"
-      centered
-      header-class="no-border"
-      body-class="my-modal-body"
-      footer-class="no-border"
-      class="mb-0"
-    >
-      <template v-slot:modal-header="{ close }">
-        <b-button size="sm" variant="pink" @click="close()">
-          Close
-        </b-button>
-        <h5>{{ data.SampleNo }}</h5>
-      </template>
-      <swiper
-        ref="mySwiper"
-        :options="swiperOption"
-        style="background-color: #fdfdfd"
-        @ready="handleSwiperReadied"
-      >
-        <swiper-slide>
-          <!-- <div :data-background="imgListLarge[0]" class="slider-background-first swiper-lazy">
-            <div class="swiper-lazy-preloader"></div>
-          </div> -->
-          <div
-            :style="{ backgroundImage: `url(${imgListLarge[0]})` }"
-            class="slider-background-first"
-          ></div>
-          <!-- <img :src="imgListLarge[0]" @error="handleImgDisplay" /> -->
-        </swiper-slide>
-        <swiper-slide>
-          <div
-            :style="{ backgroundImage: `url(${imgListLarge[1]})` }"
-            class="slider-background-second"
-          ></div>
-          <!-- <img
-            :data-src="imgListLarge[1]"
-            @error="handleImgDisplay"
-            class="swiper-lazy no-border"
-          />
-          <div class="swiper-lazy-preloader"></div> -->
-        </swiper-slide>
-        <swiper-slide>
-          <div
-            :style="{ backgroundImage: `url(${imgListLarge[2]})` }"
-            class="slider-background-third"
-          ></div>
-          <!-- <img
-            :data-src="imgListLarge[2]"
-            @error="handleImgDisplay"
-            class="swiper-lazy no-border"
-          />
-          <div class="swiper-lazy-preloader"></div> -->
-        </swiper-slide>
-        <div class="swiper-pagination" slot="pagination"></div>
-      </swiper>
-      <template v-slot:modal-footer>
-        <div class="data-bar">
-          <div class="data-bar-left">
-            <span class="d-inline-block">{{ data.ItemNo }} / {{ data.SampleName }}</span>
-            <div>
-              <b-badge class="cutome-badge mr-1" v-for="(tag, index) in badgeList" :key="index">
-                {{ tag.trim() }}
-              </b-badge>
-            </div>
-          </div>
-          <div class="data-bar-right">
-            <div class="size px-4">Width：{{ data.Width ? data.Width : "-" }}</div>
-            <b-button class="download-button" @click="download">
-              <font-awesome-icon :icon="['fas', 'download']" />
-              <span class="mx-1">.sbsar</span>
-              <!-- <a ref="download" :href="downloadUrl" :download="downloadFileName">download</a> -->
-              <!-- <a href="#" @click.prevent="downloadHref">Download</a> -->
-            </b-button>
-          </div>
-        </div>
-      </template>
-    </b-modal>
   </div>
 </template>
 
 <script>
 import ScrollReveal from "scrollreveal";
 import Carousel from "@/components/carousel/index.vue";
-import { Swiper, SwiperSlide } from "vue-awesome-swiper";
-import "swiper/css/swiper.css";
 import Axios from "axios";
 
 export default {
   name: "SampleContent",
   components: {
-    Carousel,
-    Swiper,
-    SwiperSlide
+    Carousel
   },
   props: {
     data: Object
   },
   data() {
     return {
-      // scrollReveal: scrollReveal(),
-
-      fallbackImg: "http://182.52.70.198:8080/MaterialImg/ImageNotFound.png",
-      imgListLarge: [
-        `http://182.52.70.198:8080/MaterialImg/${this.data.SampleNo}/${this.data.SampleNo}-04.png`,
-        `http://182.52.70.198:8080/MaterialImg/${this.data.SampleNo}/${this.data.SampleNo}-05.png`,
-        `http://182.52.70.198:8080/MaterialImg/${this.data.SampleNo}/${this.data.SampleNo}-06.png`
-      ],
-
-      publicPath: `http://182.52.70.198:8080/MaterialImg/${this.data.SampleNo}/${this.data.SampleNo}.sbsar`,
-      // publicPath: `${process.env.VUE_APP_DOWNLOADURL}/YL-O013/YL-O013.rar`,
-      // publicPath: `${process.env.VUE_APP_DOWNLOADURL}/${this.data.SampleNo}/${this.data.SampleNo}-01.png`,
-      // downloadUrl: `${process.env.VUE_APP_DOWNLOADURL}/${this.data.SampleNo}/${this.data.SampleNo}.sbsar`,
-      downloadUrl: `http://182.52.70.198:8080/MaterialImg/${this.data.SampleNo}/${this.data.SampleNo}.sbsar`,
-      downloadFileName: `${this.data.SampleNo}.sbsar`,
-
-      swiperOption: {
-        pagination: {
-          el: ".swiper-pagination",
-          clickable: true
-        },
-        slidesPerView: 1,
-        observer: true,
-        observeParents: true,
-        preloadImages: false,
-        centeredSlides: true,
-        lazy: {
-          loadPrevNext: false
-        }
-      },
-
-      showSwiper: false
+      // scrollReveal: scrollReveal()
     };
   },
   computed: {
@@ -155,17 +40,10 @@ export default {
       }
 
       return list;
-    },
-    swiper() {
-      return this.$refs.mySwiper.swiper;
     }
   },
-  created() {
-    this.initHideSampleContent();
-    // ScrollReveal().reveal(".sample-content", { beforeReveal: this.initHideSampleContent() });
-  },
+  created() {},
   mounted() {
-    // const container = document.getElementById("sample-container");
     ScrollReveal().reveal(".sample-content", {
       container: "#sample-container",
       delay: 0,
@@ -174,29 +52,11 @@ export default {
       easing: "cubic-bezier(0,1.07,.58,.92)",
       mobile: true
     });
-    // console.log(a);
-    // console.log(this.scrollReveal.defaults);
-    // console.log(this.scrollReveal);
-    // this.scrollReveal.reveal(".sample-content", {
-    //   distance: "0",
-    //   origin: "top",
-    //   duration: 1000,
-    //   delay: 100,
-    //   easing: "ease",
-    //   mobile: true
-    // });
   },
   beforeDestroy() {
     ScrollReveal().destroy();
   },
   methods: {
-    handleSwiperReadied(swiper) {
-      console.log(swiper);
-      this.$refs.detailModal.show();
-    },
-    handleImgDisplay(e) {
-      e.target.src = "http://182.52.70.198:8080/MaterialImg/ImageNotFound.png";
-    },
     async download() {
       // 檢查下載檔案是否存在 正常 status 為 200 才下載
       const res = await fetch(this.publicPath).then(response => response.status === 200);
@@ -291,32 +151,23 @@ export default {
         });
       }
     },
-    openBox() {
-      // const res = this.handleSwiperReadied();
-      // console.log(res);
-      // this.$refs.detailModal.show();
-      // this.handleSwiperReadied();
-
-      setTimeout(() => {
-        this.$refs.detailModal.show();
-      }, 1000);
-      // console.log("this is current swiper instance object", this.swiper);
-    },
-    closeBox() {
-      this.$refs.detailModal.hide();
-    },
     initHideSampleContent() {
-      // const a = document.querySelectorAll(".sample-content");
-      // console.log(a);
-      // console.log(document.getElementsByClassName("sample-content").classList);
-      // document.getElementsByClassName("sample-content").classList.add("js-enabled");
-      // document.querySelectorAll(".sample-content").classList.add("js-enabled");
+      document.getElementsByClassName("sample-content").classList.add("js-enabled");
+      document.querySelectorAll(".sample-content").classList.add("js-enabled");
+    },
+    displaySample() {
+      this.$router.push({
+        name: "sample",
+        params: { data: this.data }
+      });
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
+@import "@/assets/css/ThemColors.scss";
+
 .sample-content {
   width: 100%;
   height: 100%;
@@ -336,6 +187,8 @@ export default {
   max-width: 300px;
   text-align: center;
   line-height: 40px;
+  color: $light-font;
+  font-family: "Roboto", sans-serif;
   border-bottom: 2px solid #000000;
   cursor: default;
 }
@@ -360,7 +213,7 @@ export default {
   .slider-background-second {
     width: 100%;
     height: 50vh;
-    background-size: cover;
+    background-size: contain;
     background-position: center center;
     background-repeat: no-repeat;
   }
@@ -368,7 +221,7 @@ export default {
   .slider-background-third {
     width: 100%;
     height: 50vh;
-    background-size: 90% 100%;
+    background-size: contain;
     background-position: center center;
     background-repeat: no-repeat;
   }
