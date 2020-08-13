@@ -124,6 +124,17 @@ img {
             border: 2px solid $secondary;
             padding: .6rem;
             height: 5rem;
+
+            .logo {
+                width: 8rem;
+                // // height: 5rem;
+                // // width: 20rem;
+                // background-color: transparent;
+                // background-image: url('./assets/logo.png');
+                // background-size: cover;
+                // background-position:50% 50%;
+                // background-repeat: no-repeat;
+            }
         }
     
         .config {

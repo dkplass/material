@@ -4,6 +4,7 @@
       <div class="main-panel">
         <h2 class="title text-no-wrap mr-2">
           <router-link to="/main">Yaw Liamy VML</router-link>
+          <!-- <img src="@/assets/logo.png" alt="Logo" class="logo" width="100%"> -->
         </h2>
       </div>
       <!-- <span

@@ -35,7 +35,12 @@
       >
         <SidebarContent></SidebarContent>
       </div>
-      <swiper ref="mySwiper" class="swiper" :options="swiperOption" @slideChange="test">
+      <swiper
+        ref="mySwiper"
+        class="swiper"
+        :options="swiperOption"
+        @slideChange="handleSliderChange"
+      >
         <swiper-slide>
           <div
             :style="{ backgroundImage: `url(${imgListLarge[0]})` }"
@@ -79,8 +84,6 @@
 import sidebar from "@/components/layout/sidebar.vue";
 import subnavbar from "@/components/layout/subpagenav.vue";
 import SidebarContent from "@/components/layout/SidebarContent.vue";
-// import { Swiper, SwiperSlide } from "vue-awesome-swiper";
-// import "swiper/css/swiper.css";
 
 export default {
   name: "sample",
@@ -88,8 +91,6 @@ export default {
     sidebar,
     subnavbar,
     SidebarContent
-    // Swiper,
-    // SwiperSlide
   },
   data() {
     return {
@@ -121,7 +122,7 @@ export default {
 
       sidebarTogglable: false,
       sidebarActive: false,
-      layerActive: false,
+      layerActive: false
     };
   },
   beforeRouteEnter(to, from, next) {
@@ -238,19 +239,15 @@ export default {
       this.headCollapse = false;
       this.layerActive = false;
     },
-    test() {
-      const a = this.swiper;
+    handleSliderChange() {
+      const _swiper = this.swiper;
+      const index = _swiper.realIndex;
 
-      console.log(a);
-
-      console.log(a.activeIndex);
-
-      // if (a.activeIndex === 3) {
-      //   this.swiper.detachEvents();
-      // } else {
-      //   this.swiper.detachEvents();
-      //   this.swiper.attachEvents();
-      // }
+      if (index === 3) {
+        _swiper.allowTouchMove = false;
+      } else {
+        _swiper.allowTouchMove = true;
+      }
     }
   }
 };
