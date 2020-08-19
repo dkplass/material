@@ -5,8 +5,8 @@
         <h2 class="title text-no-wrap mr-2">
           <router-link to="/main">Yaw Liamy VML</router-link>
         </h2>
-        <slot v-if="infoCollapsable === false" name="infoContent"></slot>
-        <template v-if="infoCollapsable === true">
+        <!-- <slot v-if="infoCollapsable === false" name="infoContent"></slot> -->
+        <!-- <template v-if="infoCollapsable === true">
           <div class="custom-detail-btn" v-b-toggle.infoContent>
             <span class="when-close">
               Open Detail
@@ -17,8 +17,7 @@
               <font-awesome-icon :icon="['fas', 'caret-up']" />
             </span>
           </div>
-          <!-- <b-button v-b-toggle.infoContent class="m-1">Detail</b-button> -->
-        </template>
+        </template> -->
       </div>
       <div class="side-panel p-2">
         <div class="block-container top h-50">
@@ -39,11 +38,11 @@
         </b-button>
       </div>
     </div>
-    <b-collapse v-if="infoCollapsable === true" id="infoContent" class="custom-collapse" is-nav>
+    <!-- <b-collapse v-if="infoCollapsable === true" id="infoContent" class="custom-collapse" is-nav>
       <b-card no-body class="custom-card">
         <slot name="infoContent"></slot>
       </b-card>
-    </b-collapse>
+    </b-collapse> -->
   </div>
 </template>
 
@@ -55,7 +54,6 @@ export default {
   components: {
     SearchBar
   },
-  props: {},
   data() {
     return {
       infoCollapsable: false
@@ -66,6 +64,9 @@ export default {
       this.detectiveInfoDisplay();
       window.addEventListener("resize", this.detectiveInfoDisplay);
     });
+  },
+  destroyed() {
+    window.removeEventListener("resize", this.detectiveInfoDisplay);
   },
   beforeRouteLeave(to, from, next) {
     window.removeEventListener("resize", this.detectiveInfoDisplay);
