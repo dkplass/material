@@ -1,6 +1,6 @@
 <template>
   <b-container fluid id="sample-container" class="py-2">
-    <b-row no-gutters>
+    <b-row no-gutters v-if="samples.length > 0">
       <b-col
         sm="12"
         md="6"
@@ -12,6 +12,7 @@
         <SampleContent :data="item"></SampleContent>
       </b-col>
     </b-row>
+    <div class="hint-message" v-else>No result, please reselect conditions...</div>
   </b-container>
 </template>
 
@@ -82,5 +83,11 @@ export default {
 
 #sample-container {
   overflow: auto;
+}
+
+.hint-message {
+  font-size: 1.2rem;
+  text-align: center;
+  color: $secondary;
 }
 </style>

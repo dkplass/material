@@ -2,7 +2,7 @@ import axios from "axios";
 
 const state = {
   tagList: [],
-  slectedTags: ["Recycled"],
+  selectedTags: ["Recycled"],
   isTagExisted: false
 };
 
@@ -18,6 +18,10 @@ const actions = {
         commit("setList", res);
       })
       .catch(console.error());
+  },
+  setSelectedTagsAndQuerySamples({ commit, dispatch }, value) {
+    commit("setSelectedTags", value);
+    dispatch("Sample/getSamples", value, { root: true });
   }
 };
 
@@ -25,8 +29,11 @@ const mutations = {
   setList(state, payload) {
     state.tagList = payload;
   },
-  setSlectedTags(state, payload) {
-    state.slectedTags = payload;
+  setSelectedTags(state, payload) {
+    state.selectedTags = payload;
+  },
+  clearAllSelectedTags(state, payload = []) {
+    state.selectedTags = payload;
   }
 };
 
@@ -34,8 +41,8 @@ const getters = {
   getTagList(state) {
     return state.tagList;
   },
-  getSlectedTags(state) {
-    return state.slectedTags;
+  getSelectedTags(state) {
+    return state.selectedTags;
   },
   hasTag: state => tagName => {
     return state.tagList.some(tag => tag.TagName.trim() === tagName);

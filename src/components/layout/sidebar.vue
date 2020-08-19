@@ -13,7 +13,7 @@
         <SearchBar @closeLayer="closeLayer"></SearchBar>
       </div>
     </div>
-    <SidebarContent></SidebarContent>
+    <SidebarContent :queryMode="queryMode"></SidebarContent>
   </div>
 </template>
 
@@ -29,7 +29,8 @@ export default {
   },
   props: {
     sidebarActive: Boolean,
-    sidebarTogglable: Boolean
+    sidebarTogglable: Boolean,
+    queryMode: Boolean
   },
   data() {
     return {};

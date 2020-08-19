@@ -27,7 +27,7 @@
               {{ tag }}
             </div>
           </div> -->
-          <Content></Content>
+          <Content v-if="!loading"></Content>
         </div>
       </b-overlay>
     </div>
@@ -35,6 +35,7 @@
     <sidebar
       :sidebarActive="sidebarActive"
       :sidebarTogglable="sidebarTogglable"
+      :queryMode="queryMode"
       @toggleSidebar="toggleSidebar"
       @closeLayer="closeLayer"
     ></sidebar>
@@ -63,7 +64,7 @@ export default {
     Content
   },
   created() {
-    this.init();
+    // this.init();
   },
   mounted() {
     this.$nextTick(() => {
@@ -73,10 +74,14 @@ export default {
   },
   computed: {
     ...mapGetters("TagList", {
-      slectedTags: "getSlectedTags"
+      selectedTags: "getSelectedTags"
+    }),
+    ...mapGetters("Sample", {
+      retrieveSamples: "retrieveSamples"
     }),
     ...mapGetters({
-      loading: "loading"
+      loading: "loading",
+      queryMode: "queryMode"
     })
   },
   methods: {
@@ -89,7 +94,7 @@ export default {
       }
     },
     init() {
-      this.$store.dispatch("Sample/getSamples", this.slectedTags);
+      // this.$store.dispatch("Sample/getSamples", this.selectedTags);
     },
     toggleSidebar() {
       // 判斷 sidebar 能否開關

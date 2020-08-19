@@ -36,7 +36,7 @@
         :class="{ active: sideMenuToggle }"
         v-if="sidebarTogglable === false"
       >
-        <SidebarContent></SidebarContent>
+        <SidebarContent :queryMode="queryMode"></SidebarContent>
       </div>
 
       <!-- 懸浮資訊窗 -->
@@ -132,6 +132,7 @@
       v-if="sidebarTogglable === true"
       :sidebarActive="sidebarActive"
       :sidebarTogglable="sidebarTogglable"
+      :queryMode="queryMode"
       @toggleSidebar="toggleSidebar"
       @closeLayer="closeLayer"
     ></sidebar>
@@ -142,6 +143,7 @@
 import sidebar from "@/components/layout/sidebar.vue";
 import subnavbar from "@/components/layout/subpagenav.vue";
 import SidebarContent from "@/components/layout/SidebarContent.vue";
+import { mapGetters } from "vuex";
 
 export default {
   name: "sample",
@@ -247,7 +249,10 @@ export default {
       const price = _data.Price ? _data.Price : "";
 
       return `${currNo} ${price}`;
-    }
+    },
+    ...mapGetters({
+      queryMode: "queryMode"
+    })
   },
   methods: {
     detectiveWidth() {

@@ -1,7 +1,7 @@
 <template>
   <div class="sample-content js-enabled">
     <Carousel :data="data" @displaySample="displaySample"></Carousel>
-    <div class="custome-carousel-caption" @click="displaySample">
+    <div class="custome-carousel-caption">
       {{ data.ItemNo }}
       <!-- <a ref="download" :href="downloadUrl" :download="downloadFileName">download</a> -->
       <!-- <input type="button" @click="download" value="download" /> -->

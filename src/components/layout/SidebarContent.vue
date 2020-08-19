@@ -8,6 +8,7 @@
         <b-form-input type="search" placeholder="Search tags" v-model="search"></b-form-input>
       </b-input-group>
     </div>
+    <div class="content-clear"><u class="text" @click="clearAll">clear all</u></div>
     <div class="sidebar-content-catagory" v-for="(catagory, index) in filterTags" :key="index">
       <div class="sidebar-content-catagory-head" v-b-toggle="`collapse-${index}`">
         <span class="sidebar-text">{{ catagory.SeriesTagName }}</span>
@@ -24,7 +25,7 @@
         >
           <b-list-group-item class="collapse-content-item">
             <b-form-checkbox
-              v-model="slectedTags"
+              v-model="selectedTags"
               :value="tag.TagName"
               inline
               class="custom-control-element"
@@ -36,19 +37,6 @@
         </b-list-group>
       </b-collapse>
     </div>
-    <!-- <b-list-group class="custome-group-list">
-        <b-list-group-item
-          class="custome-group-list-item"
-          v-for="(tag, index) in tagList"
-          :key="index"
-          :to="{ name: 'content', params: { tagName: tag.TagName.trim() } }"
-          :class="{ selected: selectedTag === tag.TagName }"
-          @click="toggleSidebar(tag.TagName)"
-        >
-          <span class="item-name">{{ tag.TagName }}</span>
-          <span class="item-count">{{ tag.TagCount }}</span>
-        </b-list-group-item>
-      </b-list-group> -->
   </div>
 </template>
 
@@ -57,23 +45,26 @@ import { mapGetters } from "vuex";
 
 export default {
   name: "SideBarMenu",
+  props: {
+    queryMode: Boolean
+  },
   data() {
     return {
-      selectedTag: "",
-      slectedTags: [],
+      selectedTags: this.getSelectedTags,
       search: ""
     };
   },
   watch: {
-    slectedTags: {
+    selectedTags: {
       handler(value) {
-        // if (this.$route.path !== "/main") {
-        //   this.$router.push({ name: "main" });
-        // }
+        console.log(this.queryMode);
 
-        this.$store.dispatch("Sample/getSamples", value);
+        if (this.queryMode === false) {
+          // tag 查詢
+          this.$store.dispatch("TagList/setSelectedTagsAndQuerySamples", value);
+        }
 
-        this.$store.commit("TagList/setSlectedTags", value);
+        // 文字查詢跳過監聽tag清單
       },
       deep: true
     }
@@ -86,7 +77,7 @@ export default {
   computed: {
     ...mapGetters("TagList", {
       getTagList: "getTagList",
-      getSlectedTags: "getSlectedTags"
+      getSelectedTags: "getSelectedTags"
     }),
     filterTags() {
       const categories = JSON.parse(JSON.stringify(this.getTagList));
@@ -110,14 +101,18 @@ export default {
   },
   methods: {
     init() {
-      this.$store.dispatch("TagList/getTags", this.slectedTags);
+      this.$store.dispatch("TagList/getTags", this.selectedTags);
 
-      this.slectedTags = this.getSlectedTags;
+      this.selectedTags = this.getSelectedTags;
     },
     retrieveDefaultSample() {
-      this.$store.dispatch("Sample/getSamples", this.slectedTags);
+      // this.$store.dispatch("Sample/getSamples", this.selectedTags);
 
-      this.$store.commit("TagList/setSlectedTags", this.slectedTags);
+      this.$store.commit("TagList/setSelectedTags", this.selectedTags);
+    },
+    clearAll() {
+      this.selectedTags = [];
+      // this.$store.commit("TagList/clearAllSelectedTags", []);
     }
   }
 };
@@ -180,6 +175,17 @@ export default {
       color: #ffffff;
       background-color: #bbbbbb;
     }
+  }
+}
+
+.content-clear {
+  padding: 0.4rem 0.8rem;
+  text-align: right;
+  font-family: inherit;
+  color: $dark-font;
+
+  .text {
+    cursor: pointer;
   }
 }
 
