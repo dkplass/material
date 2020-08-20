@@ -69,9 +69,8 @@ export default {
       },
       deep: true
     },
-    getSelectedTags(value) {
+    getSelectedTags() {
       // 當此參數變動才會跳轉首頁
-      console.log(value);
       this.$router.push({ name: "main" }).catch(error => error);
     }
   },

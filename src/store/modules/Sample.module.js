@@ -2,6 +2,7 @@ import axios from "axios";
 import router from "@/router";
 
 const state = {
+  queryText: "",
   sampleList: []
 };
 
@@ -44,6 +45,7 @@ const actions = {
         const result = response.data.Resource;
         const parseResult = JSON.parse(result);
         commit("storeSamples", parseResult);
+        commit("saveQueryText", value.value);
         commit("loading", false, { root: true });
         commit("queryMode", false, { root: true });
       })
@@ -57,12 +59,21 @@ const mutations = {
   },
   clearSamples(state) {
     state.sampleList.length = 0;
+  },
+  saveQueryText(state, payload) {
+    state.queryText = payload;
+  },
+  clearQueryText(state) {
+    state.queryText = "";
   }
 };
 
 const getters = {
   retrieveSamples(state) {
     return state.sampleList;
+  },
+  queryText(state) {
+    return state.queryText;
   }
 };
 

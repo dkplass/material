@@ -26,6 +26,7 @@ const actions = {
   },
   setSelectedTagsAndQuerySamples({ commit, dispatch }, value) {
     commit("setSelectedTags", value);
+    commit("Sample/clearQueryText", "", { root: true });
     dispatch("Sample/getSamples", value, { root: true });
   }
 };
