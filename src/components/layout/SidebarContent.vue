@@ -73,14 +73,14 @@ export default {
       console.log(value);
       this.$router.push({ name: "main" }).catch(error => error);
     },
-    filterTags(value) {
-      console.log(value);
-      // const vlaur
-      const length = value.length;
-      for (let i = 0; i < length; ++i) {
-        this.$root.$emit("bv::toggle::collapse", `collapse-${i}`);
-      }
-    }
+    // filterTags(value) {
+    //   console.log(value);
+    //   // const vlaur
+    //   const length = value.length;
+    //   for (let i = 0; i < length; ++i) {
+    //     this.$root.$emit("bv::toggle::collapse", `collapse-${i}`);
+    //   }
+    // }
   },
   created() {
     this.init();
