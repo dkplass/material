@@ -9,33 +9,35 @@
       </b-input-group>
     </div>
     <div class="content-clear"><u class="text" @click="clearAll">clear all</u></div>
-    <div class="sidebar-content-catagory" v-for="(catagory, index) in filterTags" :key="index">
-      <div class="sidebar-content-catagory-head" v-b-toggle="`collapse-${index}`">
-        <span class="sidebar-text">{{ catagory.SeriesTagName }}</span>
-        <button class="btn expand-btn float-right" v-if="catagory.SeriesTagItems.length > 0">
-          <font-awesome-icon class="when-close" :icon="['fas', 'plus']" />
-          <font-awesome-icon class="when-open" :icon="['fas', 'minus']" />
-        </button>
+    <div class="test">
+      <div class="sidebar-content-catagory" v-for="(catagory, index) in filterTags" :key="index">
+        <div class="sidebar-content-catagory-head" v-b-toggle="`collapse-${index}`">
+          <span class="sidebar-text">{{ catagory.SeriesTagName }}</span>
+          <button class="btn expand-btn float-right" v-if="catagory.SeriesTagItems.length > 0">
+            <font-awesome-icon class="when-close" :icon="['fas', 'plus']" />
+            <font-awesome-icon class="when-open" :icon="['fas', 'minus']" />
+          </button>
+        </div>
+        <b-collapse :id="`collapse-${index}`" class="w-100">
+          <b-list-group
+            class="collapse-content"
+            v-for="(tag, index) in catagory.SeriesTagItems"
+            :key="index"
+          >
+            <b-list-group-item class="collapse-content-item">
+              <b-form-checkbox
+                v-model="selectedTags"
+                :value="tag.TagName"
+                inline
+                class="custom-control-element"
+              >
+                <span>{{ tag.TagName }}</span>
+                <span class="ml-1">{{ tag.SampleAmount }}</span>
+              </b-form-checkbox>
+            </b-list-group-item>
+          </b-list-group>
+        </b-collapse>
       </div>
-      <b-collapse :id="`collapse-${index}`" class="w-100">
-        <b-list-group
-          class="collapse-content"
-          v-for="(tag, index) in catagory.SeriesTagItems"
-          :key="index"
-        >
-          <b-list-group-item class="collapse-content-item">
-            <b-form-checkbox
-              v-model="selectedTags"
-              :value="tag.TagName"
-              inline
-              class="custom-control-element"
-            >
-              <span>{{ tag.TagName }}</span>
-              <span class="ml-1">{{ tag.SampleAmount }}</span>
-            </b-form-checkbox>
-          </b-list-group-item>
-        </b-list-group>
-      </b-collapse>
     </div>
   </div>
 </template>
@@ -57,22 +59,33 @@ export default {
   watch: {
     selectedTags: {
       handler(value) {
-        console.log(this.queryMode);
-
+        // queryMode true 為經過文字查詢，否則
+        // 進入頁面後先設定當前vuex已存的tagslist
+        // 並
         if (this.queryMode === false) {
-          // tag 查詢
           this.$store.dispatch("TagList/setSelectedTagsAndQuerySamples", value);
         }
-
-        // 文字查詢跳過監聽tag清單
       },
       deep: true
+    },
+    getSelectedTags(value) {
+      // 當此參數變動才會跳轉首頁
+      console.log(value);
+      this.$router.push({ name: "main" }).catch(error => error);
+    },
+    filterTags(value) {
+      console.log(value);
+      // const vlaur
+      const length = value.length;
+      for (let i = 0; i < length; ++i) {
+        this.$root.$emit("bv::toggle::collapse", `collapse-${i}`);
+      }
     }
   },
   created() {
     this.init();
 
-    this.retrieveDefaultSample();
+    // this.retrieveDefaultSample();
   },
   computed: {
     ...mapGetters("TagList", {
@@ -106,13 +119,10 @@ export default {
       this.selectedTags = this.getSelectedTags;
     },
     retrieveDefaultSample() {
-      // this.$store.dispatch("Sample/getSamples", this.selectedTags);
-
       this.$store.commit("TagList/setSelectedTags", this.selectedTags);
     },
     clearAll() {
       this.selectedTags = [];
-      // this.$store.commit("TagList/clearAllSelectedTags", []);
     }
   }
 };

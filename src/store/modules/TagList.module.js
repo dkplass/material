@@ -2,7 +2,7 @@ import axios from "axios";
 
 const state = {
   tagList: [],
-  selectedTags: ["Recycled"],
+  selectedTags: [],
   isTagExisted: false
 };
 
@@ -15,6 +15,12 @@ const actions = {
       .then(response => {
         const tagList = response.data.Resource;
         const res = JSON.parse(tagList);
+        res.forEach(element => {
+          element.SeriesTagItems = element.SeriesTagItems.filter(tag => {
+            return tag.SampleAmount > 0;
+          });
+        });
+        console.log(res);
         commit("setList", res);
       })
       .catch(console.error());

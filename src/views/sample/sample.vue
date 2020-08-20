@@ -48,7 +48,7 @@
           <div class="list" v-if="data">
             <span>Sample No.：{{ data.SampleNo }}</span>
             <span>Item No.：{{ data.ItemNo }}</span>
-            <span>Sample Name：{{ data.SampleName }}</span>
+            <span>Description：{{ data.Remark }}</span>
             <span>Price：{{ data.CurrNo }} {{ data.Price }}</span>
           </div>
           <div class="badge-area py-2">
