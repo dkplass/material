@@ -20,7 +20,6 @@ const actions = {
             return tag.SampleAmount > 0;
           });
         });
-        console.log(res);
         commit("setList", res);
       })
       .catch(console.error());

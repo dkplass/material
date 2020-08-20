@@ -18,7 +18,7 @@
             <font-awesome-icon class="when-open" :icon="['fas', 'minus']" />
           </button>
         </div>
-        <b-collapse :id="`collapse-${index}`" class="w-100">
+        <b-collapse :id="`collapse-${index}`" v-model="collapses[index]" class="w-100">
           <b-list-group
             class="collapse-content"
             v-for="(tag, index) in catagory.SeriesTagItems"
@@ -53,7 +53,8 @@ export default {
   data() {
     return {
       selectedTags: this.getSelectedTags,
-      search: ""
+      search: "",
+      collapses: []
     };
   },
   watch: {
@@ -72,19 +73,10 @@ export default {
       // 當此參數變動才會跳轉首頁
       console.log(value);
       this.$router.push({ name: "main" }).catch(error => error);
-    },
-    // filterTags(value) {
-    //   console.log(value);
-    //   // const vlaur
-    //   const length = value.length;
-    //   for (let i = 0; i < length; ++i) {
-    //     this.$root.$emit("bv::toggle::collapse", `collapse-${i}`);
-    //   }
-    // }
+    }
   },
   created() {
     this.init();
-
     // this.retrieveDefaultSample();
   },
   computed: {
@@ -104,12 +96,24 @@ export default {
       //   return a;
       // });
 
-      return categories.filter(category => {
+      const filterResult = categories.filter(category => {
         category.SeriesTagItems = category.SeriesTagItems.filter(
           tag => reg.test(tag.TagName) === true
         );
         return category.SeriesTagItems.length > 0;
       });
+
+      if (value) {
+        filterResult.forEach((r, index) => {
+          this.collapses[index] = true;
+        });
+      } else {
+        filterResult.forEach((r, index) => {
+          this.collapses[index] = false;
+        });
+      }
+
+      return filterResult;
     }
   },
   methods: {
