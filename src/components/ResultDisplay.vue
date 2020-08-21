@@ -1,12 +1,36 @@
 <template>
   <div class="conditions-collector">
     <span>Result Filter By：</span>
-    <span v-if="queryText">{{ queryText }}</span>
-    <div v-else>
-      <b-badge variant="secondary" class="mx-1" v-for="(tag, index) in getSelectedTags" :key="index"
-        >{{ tag }}
-      </b-badge>
-    </div>
+    <span class="show-btn" v-b-toggle.content-collapse>
+      <u class="when-close">Show filters</u>
+      <u class="when-open">Close filters</u>
+    </span>
+    <!-- <div class="content-container" :class="{ active: showContent }">
+      <span v-if="queryText">{{ queryText }}</span>
+      <div v-else>
+        <b-badge
+          variant="secondary"
+          class="mx-1"
+          v-for="(tag, index) in getSelectedTags"
+          :key="index"
+          >{{ tag }}
+        </b-badge>
+      </div>
+    </div> -->
+    <b-collapse id="content-collapse" is-nav>
+      <div class="content-bg p-2">
+        <span v-if="queryText">{{ queryText }}</span>
+        <div v-else>
+          <b-badge
+            variant="secondary"
+            class="mx-1"
+            v-for="(tag, index) in getSelectedTags"
+            :key="index"
+            >{{ tag }}
+          </b-badge>
+        </div>
+      </div>
+    </b-collapse>
   </div>
 </template>
 
@@ -16,7 +40,9 @@ import { mapGetters } from "vuex";
 export default {
   name: "ResultDisplay",
   data() {
-    return {};
+    return {
+      showContent: false
+    };
   },
   computed: {
     ...mapGetters("TagList", {
@@ -25,16 +51,57 @@ export default {
     ...mapGetters("Sample", {
       queryText: "queryText"
     })
-  }
+  },
+  methods: {}
 };
 </script>
 
 <style lang="scss" scoped>
+@import "@/assets/css/ThemColors.scss";
+
 .conditions-collector {
-  width: 100%;
-  height: 5rem;
   display: flex;
+  flex-direction: row;
   justify-content: flex-start;
   align-items: flex-end;
+  width: 100%;
+  height: 5rem;
+
+  .show-btn {
+    color: $light-font;
+  }
+}
+
+.content-container {
+  display: none;
+
+  &.active {
+    display: block;
+  }
+}
+
+#content-collapse {
+  position: absolute;
+  top: 7rem;
+  left: 0;
+  z-index: 99;
+  color: $light-font;
+  width: 100%;
+
+  .content-bg {
+    background-color: rgba(0, 0, 0, 0.7);
+    border-bottom: 2px solid $secondary;
+  }
+}
+
+@media (max-width: 576px) {
+  .conditions-collector {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    width: 100%;
+    height: 5rem;
+  }
 }
 </style>

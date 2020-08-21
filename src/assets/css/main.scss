@@ -60,6 +60,10 @@ img {
     border: none;
 }
 
+model-viewer {
+    --poster-color: transparent;
+}
+
 .not-collapsed {
     .when-close {
       display: none;
