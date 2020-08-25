@@ -9,35 +9,33 @@
       </b-input-group>
     </div>
     <div class="content-clear"><u class="text" @click="clearAll">clear all</u></div>
-    <div class="test">
-      <div class="sidebar-content-catagory" v-for="(catagory, index) in filterTags" :key="index">
-        <div class="sidebar-content-catagory-head" v-b-toggle="`collapse-${index}`">
-          <span class="sidebar-text">{{ catagory.SeriesTagName }}</span>
-          <button class="btn expand-btn float-right" v-if="catagory.SeriesTagItems.length > 0">
-            <font-awesome-icon class="when-close" :icon="['fas', 'plus']" />
-            <font-awesome-icon class="when-open" :icon="['fas', 'minus']" />
-          </button>
-        </div>
-        <b-collapse :id="`collapse-${index}`" v-model="collapses[index]" class="w-100">
-          <b-list-group
-            class="collapse-content"
-            v-for="(tag, index) in catagory.SeriesTagItems"
-            :key="index"
-          >
-            <b-list-group-item class="collapse-content-item">
-              <b-form-checkbox
-                v-model="selectedTags"
-                :value="tag.TagName"
-                inline
-                class="custom-control-element"
-              >
-                <span>{{ tag.TagName }}</span>
-                <span class="ml-1">{{ tag.SampleAmount }}</span>
-              </b-form-checkbox>
-            </b-list-group-item>
-          </b-list-group>
-        </b-collapse>
+    <div class="sidebar-content-catagory" v-for="(catagory, index) in filterTags" :key="index">
+      <div class="sidebar-content-catagory-head" v-b-toggle="`collapse-${index}`">
+        <span class="sidebar-text">{{ catagory.SeriesTagName }}</span>
+        <button class="btn expand-btn float-right" v-if="catagory.SeriesTagItems.length > 0">
+          <font-awesome-icon class="when-close" :icon="['fas', 'plus']" />
+          <font-awesome-icon class="when-open" :icon="['fas', 'minus']" />
+        </button>
       </div>
+      <b-collapse :id="`collapse-${index}`" v-model="collapses[index]" class="w-100">
+        <b-list-group
+          class="collapse-content"
+          v-for="(tag, index) in catagory.SeriesTagItems"
+          :key="index"
+        >
+          <b-list-group-item class="collapse-content-item">
+            <b-form-checkbox
+              v-model="selectedTags"
+              :value="tag.TagName"
+              inline
+              class="custom-control-element"
+            >
+              <span>{{ tag.TagName }}</span>
+              <span class="ml-1">{{ tag.SampleAmount }}</span>
+            </b-form-checkbox>
+          </b-list-group-item>
+        </b-list-group>
+      </b-collapse>
     </div>
   </div>
 </template>

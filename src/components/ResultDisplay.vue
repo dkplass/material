@@ -20,7 +20,7 @@
     <b-collapse id="content-collapse" is-nav>
       <div class="content-bg p-2">
         <span v-if="queryText">{{ queryText }}</span>
-        <div v-else>
+        <div v-else-if="getSelectedTags.length > 0">
           <b-badge
             variant="secondary"
             class="mx-1"
@@ -29,6 +29,7 @@
             >{{ tag }}
           </b-badge>
         </div>
+        <span v-else>No filters...</span>
       </div>
     </b-collapse>
   </div>
@@ -89,7 +90,7 @@ export default {
   width: 100%;
 
   .content-bg {
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(0, 0, 0, 0.2);
     border-bottom: 2px solid $secondary;
   }
 }

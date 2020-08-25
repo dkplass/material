@@ -68,29 +68,6 @@
         </div>
         <!-- {{ data }} -->
       </div>
-      <!-- <div id="infoPanel" class="info-panel" v-if="data">
-        {{ data.SampleNo }}
-      </div>
-      <b-tooltip target="infoPanel" triggers="hover" placement="right">
-        Show Detail
-      </b-tooltip> -->
-      <!-- <div class="info-panel" v-if="data">
-        <div class="custom-detail-btn" v-b-toggle.infoContent>
-          <span class="when-close">
-            {{ data.SampleNo }} 
-            <font-awesome-icon :icon="['fas', 'caret-right']" />
-          </span>
-          <span class="when-open">
-            {{ data.SampleNo }} 
-            <font-awesome-icon :icon="['fas', 'caret-left']" />
-          </span>
-        </div>
-        <b-collapse id="infoContent" class="custom-collapse" is-nav>
-          <b-card no-body class="custom-card">
-            test
-          </b-card>
-        </b-collapse>
-      </div> -->
 
       <!-- 滑動展示區 -->
       <swiper
@@ -126,6 +103,9 @@
         </swiper-slide>
         <div class="swiper-pagination" slot="pagination"></div>
       </swiper>
+
+      <!-- 色彩樣本選擇器 -->
+      <SamplePicker></SamplePicker>
     </div>
     <div v-if="layerActive" class="layer" @click="closeLayer"></div>
     <sidebar
@@ -143,6 +123,7 @@
 import sidebar from "@/components/layout/sidebar.vue";
 import subnavbar from "@/components/layout/subpagenav.vue";
 import SidebarContent from "@/components/layout/SidebarContent.vue";
+import SamplePicker from "@/components/SamplePicker.vue";
 import { mapGetters } from "vuex";
 
 export default {
@@ -150,7 +131,8 @@ export default {
   components: {
     sidebar,
     subnavbar,
-    SidebarContent
+    SidebarContent,
+    SamplePicker
   },
   data() {
     return {
@@ -469,11 +451,13 @@ model-viewer {
   right: 0;
   z-index: 9999;
   opacity: 0;
+  display: none;
   transition: all 0.2s linear;
 
   &.active {
     border-top: 2px solid $primary;
     opacity: 1;
+    display: block;
 
     .sidebar-content {
       overflow: auto;
