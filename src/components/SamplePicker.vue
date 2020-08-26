@@ -44,12 +44,10 @@ export default {
   methods: {
     openPicker() {
       this.active = !this.active;
-      console.log("hI");
     },
     select(e) {
       const _target = e.target;
       const colorInfo = _target.getAttribute("data-color");
-      console.log(colorInfo);
       this.selectPlatte = colorInfo;
     }
   }

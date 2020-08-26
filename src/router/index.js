@@ -17,10 +17,14 @@ const routes = [
     path: "/sample",
     name: "sample",
     component: () => import("@/views/sample/sample.vue"),
-    // props: { name: 'sample' }
     props: route => ({
       ...route.params
     })
+  },
+  {
+    path: "/upload",
+    name: "upload",
+    component: () => import("@/views/upload/upload.vue")
   }
 ];
 
