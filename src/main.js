@@ -1,3 +1,5 @@
+import "@babel/polyfill";
+import "@webcomponents/webcomponentsjs";
 import Vue from "vue";
 import axios from "axios";
 import VueAxios from "vue-axios";

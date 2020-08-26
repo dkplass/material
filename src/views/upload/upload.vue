@@ -1,10 +1,10 @@
 <template>
-  <b-container class="p-2">
+  <b-container class="upload-panel p-2">
     <b-card class="h-100">
       <b-container fluid>
+        <!-- <input type="file" accept=".jpg, .png" @change="onImageChange" /> -->
         <b-form-file
           v-model="file"
-          :state="Boolean(file)"
           placeholder="Choose a file or drop it here..."
           drop-placeholder="Drop file here..."
           accept=".jpg, .png"
@@ -31,7 +31,9 @@ export default {
   },
   methods: {
     onImageChange(e) {
-      const file = e.target.files[0];
+      console.log(e);
+      const file = e.dataTransfer.files[0];
+      // const file = e.target.files[0];
       this.url = URL.createObjectURL(file);
     },
     upload() {
