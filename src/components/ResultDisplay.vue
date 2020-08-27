@@ -5,18 +5,6 @@
       <u class="when-close">Show filters</u>
       <u class="when-open">Close filters</u>
     </span>
-    <!-- <div class="content-container" :class="{ active: showContent }">
-      <span v-if="queryText">{{ queryText }}</span>
-      <div v-else>
-        <b-badge
-          variant="secondary"
-          class="mx-1"
-          v-for="(tag, index) in getSelectedTags"
-          :key="index"
-          >{{ tag }}
-        </b-badge>
-      </div>
-    </div> -->
     <b-collapse id="content-collapse" is-nav>
       <div class="content-bg p-2">
         <span v-if="queryText">{{ queryText }}</span>

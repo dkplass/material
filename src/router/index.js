@@ -21,10 +21,27 @@ const routes = [
       ...route.params
     })
   },
+  // {
+  //   path: "/upload",
+  //   name: "upload",
+  //   component: () => import("@/views/upload/upload.vue")
+  // }
   {
-    path: "/upload",
-    name: "upload",
-    component: () => import("@/views/upload/upload.vue")
+    path: "/admin",
+    name: "admin",
+    component: () => import("@/views/admin_v1/admin_demo.vue"),
+    children: [
+      {
+        path: "/",
+        name: "list",
+        component: () => import("@/views/admin_v1/list_demo.vue")
+      },
+      {
+        path: "detail/:SampleNo?",
+        name: "detail",
+        component: () => import("@/views/admin_v1/detail_demo.vue")
+      }
+    ]
   }
 ];
 

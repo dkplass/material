@@ -32,8 +32,8 @@ export default {
   methods: {
     onImageChange(e) {
       console.log(e);
-      const file = e.dataTransfer.files[0];
-      // const file = e.target.files[0];
+      // const file = e.dataTransfer.files[0];
+      const file = e.target.files[0];
       this.url = URL.createObjectURL(file);
     },
     upload() {

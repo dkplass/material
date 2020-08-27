@@ -17,16 +17,6 @@
         class="fetching-overlay"
       >
         <div class="wrapper">
-          <!-- <div class="conditions-bar px-2">
-            <b-dropdown size="sm" text="expand" variant="primary" class="m-2" boundary="conditions-bar" inline>
-              <b-dropdown-item-button>Action</b-dropdown-item-button>
-              <b-dropdown-item-button>Another action</b-dropdown-item-button>
-              <b-dropdown-item-button>Something else here</b-dropdown-item-button>
-            </b-dropdown>
-            <div class="tags" v-for="(tag, index) in slectedTags" :key="index">
-              {{ tag }}
-            </div>
-          </div> -->
           <Content v-if="!loading"></Content>
         </div>
       </b-overlay>

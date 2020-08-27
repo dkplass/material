@@ -211,22 +211,10 @@ model-viewer {
     background: $secondary !important;
 }
 
-.btn-pink {
-    color: #ffffff;
-    background-color: #f17f7f;
-    border-color: #e69494;
-}
-
-.btn-pink:hover {
-    color: #ffffff;
-    background-color: #d15959;
-    border-color: #e69494;
-}
-
-.btn-pink:not(:disabled):not(.disabled):active, .btn-pink:not(:disabled):not(.disabled).active, .show > .btn-pink.dropdown-toggle {
-    color: #ffffff;
-    background-color: #f17f7f;
-    border-color: #e69494;
+.admin-panel {
+    * {
+        font-family:  -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    }
 }
 
 @media (max-width: 1024px) {
