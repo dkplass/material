@@ -29,20 +29,26 @@ const routes = [
   {
     path: "/admin",
     name: "admin",
+    redirect: "/admin/list",
     component: () => import("@/views/admin_v1/admin_demo.vue"),
     children: [
       {
-        path: "/",
+        path: "list",
         name: "list",
         component: () => import("@/views/admin_v1/list_demo.vue")
       },
       {
-        path: "detail/:SampleNo?",
+        path: "detail",
         name: "detail",
         component: () => import("@/views/admin_v1/detail_demo.vue")
       }
     ]
   }
+  // {
+  //   path: "/admin",
+  //   component: () => import("@/layout/admin/index.vue"),
+  //   children: []
+  // }
 ];
 
 const router = new VueRouter({

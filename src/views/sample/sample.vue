@@ -57,7 +57,7 @@
             </b-badge>
           </div>
           <div class="py-2">
-            <button class="btn download-button" @click="download">
+            <button class="btn download-button" @click="download" disabled>
               <font-awesome-icon :icon="['fas', 'download']" />
               <span class="mx-1">.sbsar</span>
             </button>
