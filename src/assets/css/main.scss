@@ -217,6 +217,12 @@ model-viewer {
     }
 }
 
+.gui-wrapper {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
 @media (max-width: 1024px) {
     #sidebar {
         position: absolute;

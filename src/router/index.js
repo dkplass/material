@@ -21,6 +21,11 @@ const routes = [
       ...route.params
     })
   },
+  {
+    path: "/3D_Demo",
+    name: "3d",
+    component: () => import("@/views/three/index.vue")
+  },
   // {
   //   path: "/upload",
   //   name: "upload",
