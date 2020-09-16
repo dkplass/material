@@ -7,29 +7,9 @@
         @toggleSidebar="toggleSidebar"
         @closeLayer="closeLayer"
       >
-        <!-- <template v-slot:infoContent>
-          <div class="info-content" ref="InfoContent">
-            <div class="text-panel">
-              <div class="main-info">
-                <span class="m-0"> {{ sampleTitle }} / 建議售價：{{ suggestPrice }} </span>
-              </div>
-              <div class="badge-area">
-                <b-badge class="cutome-badge mr-1" v-for="(tag, index) in badgeList" :key="index">
-                  {{ tag.trim() }}
-                </b-badge>
-              </div>
-            </div>
-            <div class="p-2">
-              <button class="btn download-button" @click="download">
-                <font-awesome-icon :icon="['fas', 'download']" />
-                <span class="mx-1">.sbsar</span>
-              </button>
-            </div>
-          </div>
-        </template> -->
       </subnavbar>
 
-      <!-- 樣品頁可開關側欄 -->
+      <!-- 樣品頁可開關右側欄 -->
       <div
         id="sidebar"
         class="side-menu"
@@ -39,35 +19,13 @@
         <SidebarContent :queryMode="queryMode"></SidebarContent>
       </div>
 
-      <!-- 懸浮資訊窗 -->
-      <div class="indicate" :class="{ active: showInfoPanel }" @click="toggleInfoPanel">
-        <font-awesome-icon :icon="['fas', 'caret-right']" />
-      </div>
-      <div class="info-panel p-2" :class="{ active: showInfoPanel }">
-        <div class="info-panel-content">
-          <div class="list" v-if="data">
-            <span>Sample No.：{{ data.SampleNo }}</span>
-            <span>Item No.：{{ data.ItemNo }}</span>
-            <span>Description：{{ data.Remark }}</span>
-            <span>Price：{{ data.CurrNo }} {{ data.Price }}</span>
-          </div>
-          <div class="badge-area py-2">
-            <b-badge class="cutome-badge mr-1" v-for="(tag, index) in badgeList" :key="index">
-              {{ tag.trim() }}
-            </b-badge>
-          </div>
-          <div class="py-2">
-            <button class="btn download-button" @click="download" disabled>
-              <font-awesome-icon :icon="['fas', 'download']" />
-              <span class="mx-1">.sbsar</span>
-            </button>
-          </div>
-        </div>
-        <div class="info-panel-head px-1" @click="toggleInfoPanel">
-          <font-awesome-icon :icon="['fas', 'caret-left']" size="lg" />
-        </div>
-        <!-- {{ data }} -->
-      </div>
+      <!-- 左側懸浮資訊窗 -->
+      <InfoPanel
+        :data="data"
+        :activeColorPickerPanel="activeColorPickerPanel"
+        @download="download"
+        @displayModel="displayModel"
+      ></InfoPanel>
 
       <!-- 滑動展示區 -->
       <swiper
@@ -89,23 +47,18 @@
           ></div>
         </swiper-slide>
         <swiper-slide>
-          <div
-            :style="{ backgroundImage: `url(${imgListLarge[2]})` }"
-            class="slider-background-third"
-          ></div>
-        </swiper-slide>
-        <swiper-slide>
-          <model-viewer
+          <!-- <model-viewer
             src="https://raw.githubusercontent.com/dkplass/dkplass.github.io/master/YL-O009_M0545.glb"
             camera-controls=""
             alt="A 3D model"
-          ></model-viewer>
+          ></model-viewer> -->
+          <ModelViewer v-if="activeColorPickerPanel" :modelObject="modelObject"></ModelViewer>
         </swiper-slide>
         <div class="swiper-pagination" slot="pagination"></div>
       </swiper>
 
       <!-- 色彩樣本選擇器 -->
-      <SamplePicker></SamplePicker>
+      <SamplePicker v-if="activeColorPickerPanel"></SamplePicker>
     </div>
     <div v-if="layerActive" class="layer" @click="closeLayer"></div>
     <sidebar
@@ -124,6 +77,8 @@ import sidebar from "@/components/layout/sidebar.vue";
 import subnavbar from "@/components/layout/subpagenav.vue";
 import SidebarContent from "@/components/layout/SidebarContent.vue";
 import SamplePicker from "@/components/SamplePicker.vue";
+import InfoPanel from "@/components/InfoPanel.vue";
+import ModelViewer from "@/components/ModelViewer.vue";
 import { mapGetters } from "vuex";
 
 export default {
@@ -132,11 +87,14 @@ export default {
     sidebar,
     subnavbar,
     SidebarContent,
-    SamplePicker
+    SamplePicker,
+    InfoPanel,
+    ModelViewer
   },
   data() {
     return {
       data: null,
+      modelObject: "PBR_TestBox.obj",
 
       sideMenuToggle: false,
 
@@ -162,11 +120,11 @@ export default {
         // }
       },
 
-      sidebarTogglable: false,
-      sidebarActive: false,
-      layerActive: false,
+      sidebarTogglable: false, // 是否啟動側欄toggle的選項
+      sidebarActive: false, // 打開側欄
+      layerActive: false, // 打開遮罩
 
-      showInfoPanel: false
+      activeColorPickerPanel: false
     };
   },
   beforeRouteEnter(to, from, next) {
@@ -196,41 +154,8 @@ export default {
     window.removeEventListener("resize", this.detectiveWidth);
   },
   computed: {
-    badgeList() {
-      if (!this.data) return [];
-
-      let list = this.data.Tags.split(",") || [];
-
-      if (!list) {
-        list = [];
-      }
-
-      if (list.length > 10) {
-        list.length = 10;
-      }
-
-      return list;
-    },
     swiper() {
       return this.$refs.mySwiper.$swiper;
-    },
-    sampleTitle() {
-      if (!this.data) return "";
-
-      const _data = this.data;
-      const itemNo = _data.ItemNo ? _data.ItemNo : "";
-      const sampleName = _data.SampleName ? _data.SampleName : "";
-
-      return `${itemNo} / ${sampleName}`;
-    },
-    suggestPrice() {
-      if (!this.data) return "";
-
-      const _data = this.data;
-      const currNo = _data.CurrNo ? _data.CurrNo : "";
-      const price = _data.Price ? _data.Price : "";
-
-      return `${currNo} ${price}`;
     },
     ...mapGetters({
       queryMode: "queryMode"
@@ -238,6 +163,8 @@ export default {
   },
   methods: {
     detectiveWidth() {
+      // 偵測寬度，變更控制項
+      // 目前：導覽列側欄是否可開關
       const windowWidth = window.innerWidth;
 
       if (windowWidth > 1024) {
@@ -247,6 +174,7 @@ export default {
       }
     },
     createdData() {
+      // 建立頁面資料，包含圖片路徑、下載路徑
       if (!this.data) {
         this.imgListLarge = [];
         this.publicPath = "";
@@ -255,8 +183,7 @@ export default {
       } else {
         this.imgListLarge = [
           `http://182.52.70.198:8080/MaterialImg/${this.data.SampleNo}/${this.data.SampleNo}-04.png`,
-          `http://182.52.70.198:8080/MaterialImg/${this.data.SampleNo}/${this.data.SampleNo}-05.png`,
-          `http://182.52.70.198:8080/MaterialImg/${this.data.SampleNo}/${this.data.SampleNo}-06.png`
+          `http://182.52.70.198:8080/MaterialImg/${this.data.SampleNo}/${this.data.SampleNo}-05.png`
         ];
 
         this.publicPath = `http://182.52.70.198:8080/MaterialImg/${this.data.SampleNo}/${this.data.SampleNo}.sbsar`;
@@ -308,18 +235,22 @@ export default {
       this.headCollapse = false;
       this.layerActive = false;
     },
-    toggleInfoPanel() {
-      this.showInfoPanel = !this.showInfoPanel;
-    },
     handleSliderChange() {
+      // 控制在特定slide position會有特定功能
+      // 在3D view位置關閉觸控滑動功能、顯示樣品選擇工具列
       const _swiper = this.swiper;
       const index = _swiper.realIndex;
 
-      if (index === 3) {
+      if (index === 2) {
         _swiper.allowTouchMove = false;
+        this.activeColorPickerPanel = true;
       } else {
         _swiper.allowTouchMove = true;
+        this.activeColorPickerPanel = false;
       }
+    },
+    displayModel(model) {
+      this.modelObject = model;
     }
   }
 };
@@ -339,105 +270,6 @@ model-viewer {
   width: 100%;
   height: 100%;
   background-color: rgba($color: #000000, $alpha: 0.8);
-}
-
-.indicate {
-  position: absolute;
-  top: 50%;
-  padding: 0.2rem 0.6rem;
-  background-color: #3b3b3b;
-  border: 2px solid #f2f2f2;
-  border-left: none;
-  border-bottom-right-radius: 99rem;
-  border-top-right-radius: 99rem;
-  color: #f2f2f2;
-  font-family: "Roboto", sans-serif;
-  z-index: 99;
-  cursor: pointer;
-  transition: all 0.2s linear;
-
-  &:hover {
-    padding: 0.2rem 0.6rem 0.2rem 1.2rem;
-  }
-}
-
-.info-panel {
-  display: flex;
-  flex-direction: row;
-  position: absolute;
-  top: 7rem;
-  left: -18rem;
-  color: #f2f2f2;
-  font-family: "Roboto", sans-serif;
-  // background-color: rgba($color: #f2f2f2, $alpha: 0.2);
-  background-color: $primary;
-  width: 100%;
-  max-width: 18rem;
-  height: calc(100% - 7rem);
-  z-index: 100;
-  overflow: hidden;
-  transition: all 0.2s linear;
-  border-right: 2px solid $secondary;
-
-  &.active {
-    left: 0;
-  }
-
-  .info-panel-head {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: $primary;
-    background-color: $secondary;
-    cursor: pointer;
-  }
-
-  .close-btn {
-    cursor: pointer;
-  }
-
-  .info-panel-content {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 100%;
-    overflow-y: auto;
-
-    .list {
-      flex: 1 1 auto;
-
-      > span {
-        display: block;
-        width: 100%;
-      }
-
-      span + span {
-        padding-top: 0.2rem;
-      }
-    }
-  }
-}
-
-// ::v-deep .info-content {
-//   display: flex;
-//   flex-flow: row;
-//   align-items: center;
-//   justify-content: space-between;
-//   width: 100%;
-//   height: 100%;
-//   font-family: "Roboto", sans-serif;
-
-//   .main-info {
-//     display: flex;
-//   }
-// }
-
-.download-button {
-  border: 2px solid $secondary;
-  border-radius: 0;
-  color: $secondary;
-  display: flex;
-  flex-wrap: nowrap;
 }
 
 .side-menu {

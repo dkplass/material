@@ -24,7 +24,12 @@ const routes = [
   {
     path: "/3D_Demo",
     name: "3d",
-    component: () => import("@/views/three/index.vue")
+    component: () => import("@/views/three/testbox.vue")
+  },
+  {
+    path: "/chair",
+    name: "chair",
+    component: () => import("@/views/three/chair.vue")
   },
   // {
   //   path: "/upload",

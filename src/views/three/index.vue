@@ -82,7 +82,6 @@ export default {
       this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
       this.renderer.setPixelRatio(window.devicePixelRatio);
       this.renderer.gammaFactor = 2.2;
-      this.renderer.outputEncoding = Three.sRGBEncoding;
       this.renderer.physicallyCorrectLights = true;
       this.container.appendChild(this.renderer.domElement);
 
@@ -239,6 +238,7 @@ export default {
       });
     },
     resizeRender(renderer) {
+      // maybe change method only when resize window
       const canvas = renderer.domElement;
       const width = this.container.clientWidth;
       const height = this.container.clientHeight;
