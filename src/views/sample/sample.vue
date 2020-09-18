@@ -193,7 +193,8 @@ export default {
     },
     async download() {
       // 檢查下載檔案是否存在 正常 status 為 200 才下載
-      const res = await fetch(this.publicPath).then(response => response.status === 200);
+      // const res = await fetch(this.publicPath).then(response => response.status === 200);
+      const res = true;
 
       if (res) {
         const link = document.createElement("a");
