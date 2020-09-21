@@ -5,8 +5,11 @@
         <font-awesome-icon :icon="['fas', 'bars']" />
       </b-button> -->
       <div class="block-container h-50">
-        <b-button class="mr-2">
+        <b-button class="px-1">
           <font-awesome-icon :icon="['fas', 'user']" size="lg" />
+        </b-button>
+        <b-button class="px-1">
+          <font-awesome-icon :icon="['fas', 'heart']" size="lg" />
         </b-button>
       </div>
       <div class="block-container h-50 px-2">

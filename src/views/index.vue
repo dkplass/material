@@ -55,8 +55,10 @@ export default {
   },
   created() {
     // this.init();
+    console.log("IN index");
   },
   mounted() {
+    console.log("render");
     this.$nextTick(() => {
       this.detectiveWidth();
       window.addEventListener("resize", this.detectiveWidth);
