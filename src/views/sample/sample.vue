@@ -76,7 +76,7 @@
 import sidebar from "@/components/layout/sidebar.vue";
 import subnavbar from "@/components/layout/subpagenav.vue";
 import SidebarContent from "@/components/layout/SidebarContent.vue";
-import SamplePicker from "@/components/SamplePicker.vue";
+import SamplePicker from "@/components/shelf/SamplePicker.vue";
 import InfoPanel from "@/components/InfoPanel.vue";
 import ModelViewer from "@/components/ModelViewer.vue";
 import { mapGetters } from "vuex";
@@ -91,9 +91,12 @@ export default {
     InfoPanel,
     ModelViewer
   },
+  props: {
+    data: Object
+  },
   data() {
     return {
-      data: null,
+      // data: null,
       modelObject: "PBR_TestBox.obj",
 
       sideMenuToggle: false,
@@ -146,7 +149,7 @@ export default {
       window.addEventListener("resize", this.detectiveWidth);
     });
 
-    this.data = this.$route.params.data;
+    // this.data = this.$route.params.data;
 
     this.createdData();
   },
@@ -181,13 +184,15 @@ export default {
         this.downloadUrl = "";
         this.downloadFileName = "";
       } else {
+        const path = "https://materialballfile.blob.core.windows.net/material/網頁檔案";
+
         this.imgListLarge = [
-          `http://182.52.70.198:8080/MaterialImg/${this.data.SampleNo}/${this.data.SampleNo}-04.png`,
-          `http://182.52.70.198:8080/MaterialImg/${this.data.SampleNo}/${this.data.SampleNo}-05.png`
+          `${path}/${this.data.SampleNo}/${this.data.SampleNo}-04.png`,
+          `${path}/${this.data.SampleNo}/${this.data.SampleNo}-05.png`
         ];
 
-        this.publicPath = `http://182.52.70.198:8080/MaterialImg/${this.data.SampleNo}/${this.data.SampleNo}.sbsar`;
-        this.downloadUrl = `http://182.52.70.198:8080/MaterialImg/${this.data.SampleNo}/${this.data.SampleNo}.sbsar`;
+        this.publicPath = `${path}/${this.data.SampleNo}/${this.data.SampleNo}.sbsar`;
+        this.downloadUrl = `${path}/${this.data.SampleNo}/${this.data.SampleNo}.sbsar`;
         this.downloadFileName = `${this.data.SampleNo}.sbsar`;
       }
     },

@@ -46,7 +46,11 @@ export default {
   name: "ListDemo",
   data() {
     return {
-      inputText: "YL-O001",
+      query: {
+        SampleNo: "",
+        ColorNo: ""
+      },
+      inputText: "",
       samples: null,
       tableSettings: {
         perPage: 20,
@@ -69,7 +73,12 @@ export default {
     //   query = colorNo;
     // }
 
-    this.inputText = this.$route.query.SampleNo || "";
+    // this.inputText = this.$route.query.SampleNo || "";
+
+    this.query.SampleNo = this.$route.query.SampleNo || "";
+
+    this.query.ColorNo = this.$route.query.ColorNo || "";
+
     this.getSamples();
   },
   computed: {
@@ -105,15 +114,30 @@ export default {
   methods: {
     getSamples() {
       const api = `${process.env.VUE_APP_BASE_API}/api/FilePath/GetList`;
+      let condition = null;
+      // const config = {
+      //   headers: {
+      //     "Content-Type": "application/json"
+      //   }
+      // };
 
-      const config = {
-        headers: {
-          "Content-Type": "application/json"
-        }
-      };
+      // this.$http
+      //   .post(api, JSON.stringify(this.inputText), config)
+      //   .then(response => {
+      //     this.samples = response.data.Resource;
+      //   })
+      //   .catch(console.error);
+
+      if (!this.inputText || this.inputText === "") {
+        condition = this.query;
+      } else {
+        condition = { sampleNo: this.inputText };
+      }
+
+      console.log(condition);
 
       this.$http
-        .post(api, JSON.stringify(this.inputText), config)
+        .post(api, condition)
         .then(response => {
           this.samples = response.data.Resource;
         })

@@ -12,7 +12,7 @@
       background="rgba(0, 0, 0, 0.1)"
       no-hover-pause
     >
-      <b-carousel-slide v-for="(img, index) in imgList" :key="index">
+      <b-carousel-slide v-for="(img, index) in imgLists" :key="index">
         <template v-slot:img>
           <div class="img-container">
             <img :data-src="img" class="lazyload" @error="handleImgDisplay" />
@@ -57,6 +57,16 @@ export default {
       }
 
       return time;
+    },
+    imgLists() {
+      const path = "https://materialballfile.blob.core.windows.net/material/網頁檔案";
+      const list = [];
+
+      for (let i = 1; i <= 3; i++) {
+        list[i - 1] = `${path}/${this.data.SampleNo}/${this.data.SampleNo}-0${i}.png`;
+      }
+
+      return list;
     }
   },
   methods: {

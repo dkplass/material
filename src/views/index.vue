@@ -16,8 +16,8 @@
         spinner-variant="secondary"
         class="fetching-overlay"
       >
-        <div class="wrapper">
-          <Content v-if="!loading"></Content>
+        <div class="wrapper" v-if="!loading">
+          <SampleContainer></SampleContainer>
         </div>
       </b-overlay>
     </div>
@@ -35,7 +35,7 @@
 <script>
 import navbar from "@/components/layout/navbar.vue";
 import sidebar from "@/components/layout/sidebar.vue";
-import Content from "@/views/content/content.vue";
+import SampleContainer from "@/components/shelf/SampleContainer.vue";
 import { mapGetters } from "vuex";
 
 export default {
@@ -51,30 +51,26 @@ export default {
   components: {
     navbar,
     sidebar,
-    Content
+    SampleContainer
   },
-  created() {
-    // this.init();
-    console.log("IN index");
-  },
+  created() {},
   mounted() {
-    console.log("render");
     this.$nextTick(() => {
       this.detectiveWidth();
       window.addEventListener("resize", this.detectiveWidth);
     });
   },
   computed: {
-    ...mapGetters("TagList", {
-      selectedTags: "getSelectedTags"
-    }),
-    ...mapGetters("Sample", {
-      retrieveSamples: "retrieveSamples"
-    }),
     ...mapGetters({
       loading: "loading",
       queryMode: "queryMode"
     })
+    // ...mapGetters("TagList", {
+    //   selectedTags: "getSelectedTags"
+    // }),
+    // ...mapGetters("Sample", {
+    //   retrieveSamples: "retrieveSamples"
+    // })
   },
   methods: {
     detectiveWidth() {
@@ -84,9 +80,6 @@ export default {
       } else {
         this.sidebarTogglable = true;
       }
-    },
-    init() {
-      // this.$store.dispatch("Sample/getSamples", this.selectedTags);
     },
     toggleSidebar() {
       // 判斷 sidebar 能否開關

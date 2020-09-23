@@ -17,11 +17,11 @@
 </template>
 
 <script>
-import SampleContent from "@/components/SampleContent.vue";
+import SampleContent from "@/components/shelf/SampleContent.vue";
 import { mapGetters } from "vuex";
 
 export default {
-  name: "Content",
+  name: "SampleContainer",
   components: {
     SampleContent
   },

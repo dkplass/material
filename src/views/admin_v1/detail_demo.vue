@@ -122,7 +122,7 @@ export default {
       return !this.isColor;
     },
     previewImageURL() {
-      const url = "http://182.52.70.198:8080/MaterialImg";
+      const url = "https://materialballfile.blob.core.windows.net/material/網頁檔案";
       const file = this.sample.FPath;
       return `${url}/${file}`;
     }
@@ -195,7 +195,8 @@ export default {
           "Content-Type": "multipart/form-data"
         }
       };
-      const api = `${process.env.VUE_APP_BASE_API}/api/FilePath/Upload`;
+      // const api = `${process.env.VUE_APP_BASE_API}/api/FilePath/Upload`;
+      const api = `${process.env.VUE_APP_BASE_API}/api/FilePath/UploadAzureBlob`;
       // const api = `http://localhost:52216/api/Sample/Upload`;
 
       const newFileName = `${this.sample.SampleNo}-${this.sample.ColorNo}-${this.sample.Location}.png`;

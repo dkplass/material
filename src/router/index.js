@@ -22,15 +22,20 @@ const routes = [
     })
   },
   {
-    path: "/3D_Demo",
-    name: "3d",
-    component: () => import("@/views/three/testbox.vue")
+    path: "/favorite",
+    name: "favorite",
+    component: () => import("@/views/favorite/index.vue")
   },
-  {
-    path: "/chair",
-    name: "chair",
-    component: () => import("@/views/three/chair.vue")
-  },
+  // {
+  //   path: "/3D_Demo",
+  //   name: "3d",
+  //   component: () => import("@/views/three/testbox.vue")
+  // },
+  // {
+  //   path: "/chair",
+  //   name: "chair",
+  //   component: () => import("@/views/three/chair.vue")
+  // },
   // {
   //   path: "/upload",
   //   name: "upload",

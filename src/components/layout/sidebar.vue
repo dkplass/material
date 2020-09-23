@@ -8,7 +8,7 @@
         <b-button class="px-1">
           <font-awesome-icon :icon="['fas', 'user']" size="lg" />
         </b-button>
-        <b-button class="px-1">
+        <b-button class="px-1" to="/favorite">
           <font-awesome-icon :icon="['fas', 'heart']" size="lg" />
         </b-button>
       </div>

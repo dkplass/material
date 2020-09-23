@@ -1,14 +1,11 @@
 <template>
-  <div>
-       
-  </div>
+  <div></div>
 </template>
 
 <script>
 export default {
-	name: "Favorite"
-}
+  name: "Favorite"
+};
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>
