@@ -122,7 +122,11 @@ export default {
     retrieveDefaultSample() {
       this.$store.commit("TagList/setSelectedTags", this.selectedTags);
     },
-    clearAll() {
+    async clearAll() {
+      this.$emit("closeLayer");
+
+      await this.$nextTick();
+
       this.selectedTags = [];
     }
   }

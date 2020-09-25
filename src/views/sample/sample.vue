@@ -101,7 +101,8 @@ export default {
 
       sideMenuToggle: false,
 
-      fallbackImg: "http://182.52.70.198:8080/MaterialImg/ImageNotFound.png",
+      fallbackImg:
+        "https://materialballfile.blob.core.windows.net/material/網頁檔案/ImageNotFound.png",
       imgListLarge: [],
 
       publicPath: "",

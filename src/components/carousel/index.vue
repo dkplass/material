@@ -3,8 +3,9 @@
     class="carousel-container"
     @mouseover="isHover = true"
     @mouseleave="isHover = false"
-    @click.stop="displaySample"
+    @click.prevent="displaySample"
   >
+    <ToolBar v-show="isHover === true" :data="data"></ToolBar>
     <b-carousel
       v-model="slideIndex"
       :interval="countInterval"
@@ -24,8 +25,13 @@
 </template>
 
 <script>
+import ToolBar from "@/components/toolBar/ToolBar.vue";
+
 export default {
   name: "Carousel",
+  components: {
+    ToolBar
+  },
   props: {
     data: Object
   },
@@ -76,7 +82,8 @@ export default {
       this.$emit("displaySample");
     },
     handleImgDisplay(e) {
-      e.target.src = "http://182.52.70.198:8080/MaterialImg/ImageNotFound.png";
+      e.target.src =
+        "https://materialballfile.blob.core.windows.net/material/網頁檔案/ImageNotFound.png";
     }
   }
 };
@@ -89,6 +96,8 @@ export default {
   max-width: 300px;
   max-height: 300px;
   margin: 0 auto;
+  position: relative;
+  z-index: 2;
 }
 
 .img-container {

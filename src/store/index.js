@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import { TagList } from "./modules/TagList.module";
 import { Sample } from "./modules/Sample.module";
+import { Favorite } from "./modules/Favorite.module";
 
 Vue.use(Vuex);
 
@@ -37,6 +38,7 @@ export default new Vuex.Store({
   },
   modules: {
     TagList,
-    Sample
+    Sample,
+    Favorite
   }
 });

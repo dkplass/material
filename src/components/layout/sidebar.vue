@@ -8,7 +8,7 @@
         <b-button class="px-1">
           <font-awesome-icon :icon="['fas', 'user']" size="lg" />
         </b-button>
-        <b-button class="px-1" to="/favorite">
+        <b-button class="px-1" @click="routerTo">
           <font-awesome-icon :icon="['fas', 'heart']" size="lg" />
         </b-button>
       </div>
@@ -16,7 +16,7 @@
         <SearchBar @closeLayer="closeLayer"></SearchBar>
       </div>
     </div>
-    <SidebarContent :queryMode="queryMode"></SidebarContent>
+    <SidebarContent @closeLayer="closeLayer" :queryMode="queryMode"></SidebarContent>
   </div>
 </template>
 
@@ -39,6 +39,10 @@ export default {
     return {};
   },
   methods: {
+    routerTo() {
+      this.$router.push({ name: "favorite" });
+      this.closeLayer();
+    },
     closeLayer() {
       this.$emit("closeLayer");
     }

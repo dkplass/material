@@ -32,7 +32,6 @@ export default {
     toggleSidebar() {
       // const $el = document.getElementById("sidebar");
       // $el.classList.toggle("active");
-
       this.$emit("toggleSidebar");
     },
     toggleHeadCollapse() {

@@ -1,40 +1,53 @@
 <template>
   <b-container fluid id="sample-container" class="py-2">
-    <b-row no-gutters v-if="samples.length > 0">
+    <b-row no-gutters>
       <b-col
         sm="12"
         md="6"
         xl="4"
         class="box mb-4"
-        v-for="(item, index) in samples"
+        v-for="(item, index) in list"
         :key="generateUUID(index)"
       >
         <SampleContent :data="item"></SampleContent>
       </b-col>
     </b-row>
-    <div class="hint-message" v-else>No result, please reselect conditions...</div>
+    <!-- <div class="hint-message" v-else>No result, please reselect conditions...</div> -->
+    <infinite-loading direction="bottom" @infinite="infiniteHandler">
+      <div slot="spinner">Loading...</div>
+      <div slot="no-more"></div>
+      <div class="no-results-msg" slot="no-results">No Results</div>
+    </infinite-loading>
   </b-container>
 </template>
 
 <script>
 import SampleContent from "@/components/shelf/SampleContent.vue";
-import { mapGetters } from "vuex";
+import InfiniteLoading from "vue-infinite-loading";
+// import { mapGetters } from "vuex";
 
 export default {
   name: "SampleContainer",
   components: {
-    SampleContent
+    SampleContent,
+    InfiniteLoading
+  },
+  props: {
+    samples: Array
   },
   data() {
-    return {};
+    return {
+      count: 0,
+      page: 1,
+      list: [],
+      isEmpty: false
+    };
   },
-  created() {},
-  mounted() {},
-  computed: {
-    ...mapGetters("Sample", {
-      samples: "retrieveSamples"
-    })
-  },
+  // computed: {
+  //   ...mapGetters("Sample", {
+  //     samples: "retrieveSamples"
+  //   })
+  // },
   methods: {
     generateUUID() {
       let d = Date.now();
@@ -48,6 +61,15 @@ export default {
         d = Math.floor(d / 16);
         return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
       });
+    },
+    infiniteHandler($state) {
+      if (this.samples.length && this.list.length !== this.samples.length) {
+        this.page += 1;
+        this.list.push(...this.samples);
+        $state.loaded();
+      } else {
+        $state.complete();
+      }
     }
   }
 };

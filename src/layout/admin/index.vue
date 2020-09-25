@@ -1,7 +1,5 @@
 <template>
   <div class="wrapper">
-    <!-- navbar -->
-    <!-- sidebar -->
     <router-view :key="$router.path"></router-view>
   </div>
 </template>

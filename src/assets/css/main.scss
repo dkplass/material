@@ -223,6 +223,10 @@ model-viewer {
     right: 0;
 }
 
+.no-results-msg {
+    color: $secondary;
+}
+
 @media (max-width: 1024px) {
     #sidebar {
         position: absolute;

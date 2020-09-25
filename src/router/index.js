@@ -6,12 +6,29 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: "*",
-    redirect: "/main"
+    redirect: "/"
   },
+  // {
+  //   path: "/main",
+  //   name: "main",
+  //   component: () => import("@/views/index.vue")
+  // },
   {
-    path: "/main",
-    name: "main",
-    component: () => import("@/views/index.vue")
+    path: "/",
+    redirect: "/main",
+    component: () => import("@/layout/main.vue"),
+    children: [
+      {
+        path: "/main",
+        name: "main",
+        component: () => import("@/views/index.vue")
+      },
+      {
+        path: "/favorite",
+        name: "favorite",
+        component: () => import("@/views/favorite/index.vue")
+      }
+    ]
   },
   {
     path: "/sample",
@@ -21,11 +38,11 @@ const routes = [
       ...route.params
     })
   },
-  {
-    path: "/favorite",
-    name: "favorite",
-    component: () => import("@/views/favorite/index.vue")
-  },
+  // {
+  //   path: "/favorite",
+  //   name: "favorite",
+  //   component: () => import("@/views/favorite/index.vue")
+  // },
   // {
   //   path: "/3D_Demo",
   //   name: "3d",
