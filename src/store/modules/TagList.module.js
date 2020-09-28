@@ -24,10 +24,10 @@ const actions = {
       })
       .catch(console.error());
   },
-  setSelectedTagsAndQuerySamples({ commit, dispatch }, value) {
+  setSelectedTags({ commit }, value) {
     commit("setSelectedTags", value);
     commit("Sample/clearQueryText", "", { root: true });
-    dispatch("Sample/getSamples", value, { root: true });
+    // dispatch("Sample/getSamples", value, { root: true });
   }
 };
 

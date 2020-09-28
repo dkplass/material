@@ -50,7 +50,7 @@ export default {
   },
   data() {
     return {
-      selectedTags: this.getSelectedTags,
+      selectedTags: [],
       search: "",
       collapses: []
     };
@@ -61,20 +61,19 @@ export default {
         // queryMode true 為經過文字查詢，否則
         // 進入頁面後先設定當前vuex已存的tagslist
         // 並
+        this.$store.dispatch("TagList/setSelectedTags", value);
         if (this.queryMode === false) {
-          this.$store.dispatch("TagList/setSelectedTagsAndQuerySamples", value);
+          // this.$store.dispatch("TagList/setSelectedTagsAndQuerySamples", value);
         }
       },
       deep: true
     },
     getSelectedTags() {
-      // 當此參數變動才會跳轉首頁
       this.$router.push({ name: "main" }).catch(error => error);
     }
   },
   created() {
     this.init();
-    // this.retrieveDefaultSample();
   },
   computed: {
     ...mapGetters("TagList", {
@@ -115,12 +114,9 @@ export default {
   },
   methods: {
     init() {
-      this.$store.dispatch("TagList/getTags", this.selectedTags);
+      this.$store.dispatch("TagList/getTags");
 
       this.selectedTags = this.getSelectedTags;
-    },
-    retrieveDefaultSample() {
-      this.$store.commit("TagList/setSelectedTags", this.selectedTags);
     },
     async clearAll() {
       this.$emit("closeLayer");

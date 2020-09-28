@@ -27,11 +27,26 @@ export default {
       list: []
     };
   },
+  created() {
+    this.init();
+  },
+  watch: {
+    selectedTags() {
+      this.init();
+    }
+  },
   computed: {
     ...mapGetters({
       loading: "loading",
+      selectedTags: "TagList/getSelectedTags",
       samples: "Sample/retrieveSamples"
     })
+  },
+  methods: {
+    init() {
+      const conditions = this.selectedTags;
+      this.$store.dispatch("Sample/getSamples", conditions);
+    }
   }
 };
 </script>
