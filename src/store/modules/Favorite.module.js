@@ -15,9 +15,9 @@ const actions = {
   },
   getFavoriteSamples({ state, commit }) {
     const api = `${process.env.VUE_APP_BASE_API}/api/Sample/SampleFilterByTag`;
-    const storeFavorite = state.favorite;
+    const storeFavorite = state.favorite || [];
 
-    state.favoriteSamples = [];
+    commit("ClearFavoriteSamples");
 
     commit("loading", true, { root: true });
 
@@ -49,16 +49,16 @@ const actions = {
 const mutations = {
   GetFavorite(state) {
     const localList = window.localStorage.getItem("favorite");
-    state.favorite = JSON.parse(localList);
+    state.favorite = localList === false ? [] : JSON.parse(localList);
   },
   SetFavoriteSamples(state, payload) {
     state.favoriteSamples = payload;
   },
   CountFavorite(state) {
-    state.favoriteQty = state.favorite.length;
+    state.favoriteQty = state.favorite.length || 0;
   },
   HandleFavorite(state, payload) {
-    const list = state.favorite;
+    const list = state.favorite || [];
 
     const place = list.indexOf(payload);
 
@@ -76,6 +76,9 @@ const mutations = {
     state.favorite.length = 0;
 
     localStorage.setItem("favorite", JSON.stringify(state.favorite));
+  },
+  ClearFavoriteSamples(state) {
+    state.favoriteSamples = [];
   }
 };
 
@@ -84,7 +87,7 @@ const getters = {
     return state.favoriteQty;
   },
   favorite(state) {
-    return state.favorite;
+    return state.favorite || [];
   },
   favoriteSamples(state) {
     return state.favoriteSamples;
