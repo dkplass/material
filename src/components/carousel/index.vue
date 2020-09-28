@@ -5,7 +5,7 @@
     @mouseleave="isHover = false"
     @click.prevent="displaySample"
   >
-    <ToolBar v-show="isHover === true" :data="data"></ToolBar>
+    <ToolBar v-show="display" :data="data"></ToolBar>
     <b-carousel
       v-model="slideIndex"
       :interval="countInterval"
@@ -73,8 +73,20 @@ export default {
       }
 
       return list;
+    },
+    display() {
+      if (this.isMobile() === true) {
+        return true;
+      } else {
+        if (this.isHover === true) {
+          return true;
+        } else {
+          return false;
+        }
+      }
     }
   },
+  created() {},
   methods: {
     displaySample() {
       this.isHover = false;
@@ -84,6 +96,10 @@ export default {
     handleImgDisplay(e) {
       e.target.src =
         "https://materialballfile.blob.core.windows.net/material/網頁檔案/ImageNotFound.png";
+    },
+    isMobile() {
+      const result = !!("ontouchstart" in window || navigator.msMaxTouchPoints);
+      return result;
     }
   }
 };
