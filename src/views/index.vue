@@ -44,6 +44,7 @@ export default {
   },
   methods: {
     init() {
+      this.$store.commit("Sample/clearQueryText", "", { root: true });
       const conditions = this.selectedTags;
       this.$store.dispatch("Sample/getSamples", conditions);
     }

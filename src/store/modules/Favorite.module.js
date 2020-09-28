@@ -1,7 +1,10 @@
+import axios from "axios";
+
 const state = {
   favoriteQty: 0,
   favoriteClass: "",
-  favorite: []
+  favorite: [],
+  favoriteSamples: []
 };
 
 const actions = {
@@ -9,6 +12,28 @@ const actions = {
     // -- axios get data --
     // -- get from localstorage --
     commit("GetFavorite");
+  },
+  getFavoriteSamples({ state, commit }) {
+    const api = `${process.env.VUE_APP_BASE_API}/api/Sample/SampleFilterByTag`;
+    const storeFavorite = state.favorite;
+
+    state.favoriteSamples = [];
+
+    commit("loading", true, { root: true });
+
+    axios
+      .post(api, [])
+      .then(response => {
+        const result = JSON.parse(response.data.Resource);
+
+        const filter = result.filter(item => {
+          return storeFavorite.includes(item.SampleNo);
+        });
+
+        commit("SetFavoriteSamples", filter);
+        commit("loading", false, { root: true });
+      })
+      .catch(console.error());
   },
   handleFavorite({ commit }, value) {
     // 添加 favorite
@@ -25,6 +50,9 @@ const mutations = {
   GetFavorite(state) {
     const localList = window.localStorage.getItem("favorite");
     state.favorite = JSON.parse(localList);
+  },
+  SetFavoriteSamples(state, payload) {
+    state.favoriteSamples = payload;
   },
   CountFavorite(state) {
     state.favoriteQty = state.favorite.length;
@@ -57,6 +85,9 @@ const getters = {
   },
   favorite(state) {
     return state.favorite;
+  },
+  favoriteSamples(state) {
+    return state.favoriteSamples;
   }
 };
 

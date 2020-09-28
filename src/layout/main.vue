@@ -15,7 +15,6 @@
     <sidebar
       :sidebarActive="sidebarActive"
       :sidebarTogglable="sidebarTogglable"
-      :queryMode="queryMode"
       @toggleSidebar="toggleSidebar"
       @closeLayer="closeLayer"
     ></sidebar>
@@ -25,7 +24,6 @@
 <script>
 import navbar from "@/components/layout/navbar.vue";
 import sidebar from "@/components/layout/sidebar.vue";
-import { mapGetters } from "vuex";
 import { DetectiveWidth } from "@/mixins/mixin.detectiveWidth";
 
 export default {
@@ -41,11 +39,6 @@ export default {
       headCollapse: false,
       layerActive: false
     };
-  },
-  computed: {
-    ...mapGetters({
-      queryMode: "queryMode"
-    })
   },
   methods: {
     toggleSidebar() {

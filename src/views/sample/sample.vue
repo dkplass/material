@@ -16,7 +16,7 @@
         :class="{ active: sideMenuToggle }"
         v-if="sidebarTogglable === false"
       >
-        <SidebarContent :queryMode="queryMode"></SidebarContent>
+        <SidebarContent></SidebarContent>
       </div>
 
       <!-- 左側懸浮資訊窗 -->
@@ -65,7 +65,6 @@
       v-if="sidebarTogglable === true"
       :sidebarActive="sidebarActive"
       :sidebarTogglable="sidebarTogglable"
-      :queryMode="queryMode"
       @toggleSidebar="toggleSidebar"
       @closeLayer="closeLayer"
     ></sidebar>
@@ -79,7 +78,6 @@ import SidebarContent from "@/components/layout/SidebarContent.vue";
 import SamplePicker from "@/components/shelf/SamplePicker.vue";
 import InfoPanel from "@/components/InfoPanel.vue";
 import ModelViewer from "@/components/ModelViewer.vue";
-import { mapGetters } from "vuex";
 
 export default {
   name: "sample",
@@ -160,10 +158,7 @@ export default {
   computed: {
     swiper() {
       return this.$refs.mySwiper.$swiper;
-    },
-    ...mapGetters({
-      queryMode: "queryMode"
-    })
+    }
   },
   methods: {
     detectiveWidth() {

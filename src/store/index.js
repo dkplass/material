@@ -9,31 +9,21 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   strict: process.env.NODE_ENV !== "production",
   state: {
-    isLoading: false,
-    isQueryMode: false
+    isLoading: false
   },
   actions: {
     updateLoading(context, status) {
       context.commit("loading", status);
-    },
-    updateQueryMode(context, status) {
-      context.commit("queryMode", status);
     }
   },
   mutations: {
     loading(state, status) {
       state.isLoading = status;
-    },
-    queryMode(state, status) {
-      state.isQueryMode = status;
     }
   },
   getters: {
     loading(state) {
       return state.isLoading;
-    },
-    queryMode(state) {
-      return state.isQueryMode;
     }
   },
   modules: {

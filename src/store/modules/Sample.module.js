@@ -35,7 +35,6 @@ const actions = {
 
     commit("clearSamples");
     commit("loading", true, { root: true });
-    commit("queryMode", true, { root: true });
 
     router.push({ name: "main" }).catch(error => error);
 
@@ -47,7 +46,6 @@ const actions = {
         commit("storeSamples", parseResult);
         commit("saveQueryText", value.value);
         commit("loading", false, { root: true });
-        commit("queryMode", false, { root: true });
       })
       .catch(console.error());
   }

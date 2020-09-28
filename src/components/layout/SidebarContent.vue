@@ -45,9 +45,6 @@ import { mapGetters } from "vuex";
 
 export default {
   name: "SideBarMenu",
-  props: {
-    queryMode: Boolean
-  },
   data() {
     return {
       selectedTags: [],
@@ -58,13 +55,7 @@ export default {
   watch: {
     selectedTags: {
       handler(value) {
-        // queryMode true 為經過文字查詢，否則
-        // 進入頁面後先設定當前vuex已存的tagslist
-        // 並
         this.$store.dispatch("TagList/setSelectedTags", value);
-        if (this.queryMode === false) {
-          // this.$store.dispatch("TagList/setSelectedTagsAndQuerySamples", value);
-        }
       },
       deep: true
     },
