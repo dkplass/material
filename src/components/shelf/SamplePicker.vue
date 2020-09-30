@@ -4,52 +4,158 @@
       <font-awesome-icon :icon="['fas', 'sliders-h']" />
     </div>
     <div class="picker-selector-bar" :class="{ active: active }">
-      <span
-        class="color-dot red"
-        data-color="red"
-        :class="{ active: selectPlatte === 'red' }"
-        @click="select"
-      ></span>
-      <span
+      <!-- <span
         class="color-dot pink"
         data-color="pink"
-        :class="{ active: selectPlatte === 'pink' }"
+        :class="{ active: selectPalette === 'pink' }"
         @click="select"
-      ></span>
+      ></span> -->
+
+      <!-- :style="{
+              backgroundImage: thumbImagePath(set.thumbImage)
+            }" -->
       <span
-        class="color-dot green"
-        data-color="green"
-        :class="{ active: selectPlatte === 'green' }"
-        @click="select"
-      ></span>
-      <span
-        class="color-dot blue"
-        data-color="blue"
-        :class="{ active: selectPlatte === 'blue' }"
-        @click="select"
+        v-for="(palette, index) in palettes"
+        :key="index"
+        class="color-dot"
+        :data-color="palette.color"
+        :class="[{ active: classActive(palette.color) }, `${palette.color}`]"
+        :style="{
+          backgroundImage: `url(${palette.imagePath})`
+        }"
+        @click="select($event, palette)"
       ></span>
     </div>
   </div>
 </template>
 
 <script>
+// TODO: 父層sample元件需傳入sampleno以查詢底下有哪些色彩可用
 export default {
   name: "SamplePicker",
+  props: {
+    data: Object
+  },
   data() {
     return {
+      palettes: [],
       active: false,
-      selectPlatte: ""
+      selectPalette: ""
     };
   },
+  created() {
+    this.generateData();
+  },
+  computed: {},
   methods: {
+    generateData() {
+      // 暫時組成假資料，遇到YL-O001、YL-O002、其他
+      /*
+        palette: [{ color, imagePath }]
+      */
+      // https://materialballfile.blob.core.windows.net/material/模型基本色卡/YL-O001/YL_O001_01_PBR_Base_Color_12-0824TCX.png
+      const sampleNumber = this.data.SampleNo;
+      const path = "https://materialballfile.blob.core.windows.net/material/模型基本色卡";
+      const temp = [];
+
+      if (sampleNumber === "YL-O001") {
+        temp[0] = {
+          color: "0824TCX",
+          imagePath: `${path}/${sampleNumber}/YL_O001_01_PBR_Base_Color_12-0824TCX.png`
+        };
+
+        temp[1] = {
+          color: "1058TCX",
+          imagePath: `${path}/${sampleNumber}/YL_O001_01_PBR_Base_Color_15-1058TCX.png`
+        };
+
+        temp[2] = {
+          color: "0636TCX",
+          imagePath: `${path}/${sampleNumber}/YL_O001_01_PBR_Base_Color_17-0636TCX.png`
+        };
+
+        temp[3] = {
+          color: "4034TCX",
+          imagePath: `${path}/${sampleNumber}/YL_O001_01_PBR_Base_Color_18-4034TCX.png`
+        };
+
+        temp[4] = {
+          color: "2434TCX",
+          imagePath: `${path}/${sampleNumber}/YL_O001_01_PBR_Base_Color_19-2434TCX.png`
+        };
+      } else if (sampleNumber === "YL-O002") {
+        temp[0] = {
+          color: "0824TCX",
+          imagePath: `${path}/${sampleNumber}/YL_O002_01_PBR_Base_Color_12-0824TCX.png`
+        };
+
+        temp[1] = {
+          color: "1058TCX",
+          imagePath: `${path}/${sampleNumber}/YL_O002_01_PBR_Base_Color_15-1058TCX.png`
+        };
+
+        temp[2] = {
+          color: "0636TCX",
+          imagePath: `${path}/${sampleNumber}/YL_O002_01_PBR_Base_Color_17-0636TCX.png`
+        };
+
+        temp[3] = {
+          color: "4034TCX",
+          imagePath: `${path}/${sampleNumber}/YL_O002_01_PBR_Base_Color_18-4034TCX.png`
+        };
+
+        temp[4] = {
+          color: "2434TCX",
+          imagePath: `${path}/${sampleNumber}/YL_O002_01_PBR_Base_Color_19-2434TCX.png`
+        };
+      } else {
+        temp[0] = {
+          color: "red",
+          imagePath: ""
+        };
+
+        temp[1] = {
+          color: "pink",
+          imagePath: ""
+        };
+
+        temp[2] = {
+          color: "green",
+          imagePath: ""
+        };
+
+        temp[3] = {
+          color: "blue",
+          imagePath: ""
+        };
+
+        temp[4] = {
+          color: "orange",
+          imagePath: ""
+        };
+      }
+
+      this.palettes = temp;
+    },
     openPicker() {
       this.active = !this.active;
     },
-    select(e) {
+    classActive(color = "") {
+      const selectingColor = this.selectPalette;
+
+      if (color === selectingColor) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    select(e, palette) {
       const _target = e.target;
       const colorInfo = _target.getAttribute("data-color");
-      this.selectPlatte = colorInfo;
-    }
+      this.selectPalette = colorInfo;
+      this.$emit("switchPalette", palette);
+    },
+    imageColorPalette() {}
   }
 };
 </script>
@@ -99,8 +205,8 @@ export default {
       // border: 1px solid $secondary;
       position: relative;
       border-radius: 50%;
-      width: 20px;
-      height: 20px;
+      width: 32px;
+      height: 32px;
       margin: 0.5rem;
       cursor: pointer;
 
@@ -111,10 +217,10 @@ export default {
         left: 50%;
         transform: translate(-50%, -50%);
         display: inline-block;
-        width: 32px;
-        height: 32px;
+        width: 28px;
+        height: 28px;
         border-radius: 50%;
-        border: 4px solid;
+        border: 2px solid $primary;
         opacity: 0;
       }
 
@@ -160,6 +266,14 @@ export default {
 
   &.active::before {
     border-color: blue !important;
+  }
+}
+
+.orange {
+  background-color: orange;
+
+  &.active::before {
+    border-color: orange !important;
   }
 }
 </style>

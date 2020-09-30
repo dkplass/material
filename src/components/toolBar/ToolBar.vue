@@ -1,10 +1,21 @@
 <template>
-  <div
+  <!-- <div
     class="tool-bar"
     :class="{ extend: toolBarExtending === true }"
     @click.stop="toolBarExtending = !toolBarExtending"
   >
     <font-awesome-icon class="extend-icon" :icon="['fas', 'plus']" size="lg" />
+    <div class="tool-bar-content">
+      <font-awesome-icon
+        class="tool-bar-favorite"
+        :class="{ isFavorite: isFavorite }"
+        :icon="['fas', 'heart']"
+        size="lg"
+        @click.stop="handleFavorite"
+      />
+    </div>
+  </div> -->
+  <div class="tool-bar extend" @click.stop="toolBarExtending = !toolBarExtending">
     <div class="tool-bar-content">
       <font-awesome-icon
         class="tool-bar-favorite"
@@ -82,6 +93,7 @@ export default {
   .tool-bar-content {
     float: right;
     transform: rotate(0deg);
+    margin: 0 0.4rem; // FIXME
     opacity: 0;
     display: none;
     color: $secondary;
@@ -95,7 +107,7 @@ export default {
       border-bottom-left-radius: 20rem;
       border-top-right-radius: 20rem;
       border-bottom-right-radius: 20rem;
-      background-color: rgba($color: #ffffff, $alpha: 0.4);
+      // background-color: rgba($color: #ffffff, $alpha: 0.4);
     }
 
     .extend-icon {

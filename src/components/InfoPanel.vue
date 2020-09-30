@@ -12,6 +12,8 @@
             <span>Description：{{ data.SampleName }}</span>
             <!-- <span>Price：{{ suggestPrice }}</span> -->
           </div>
+          <!-- 加入最愛功能 -->
+          <ToolBar v-show="true" :data="data"></ToolBar>
           <div class="badge-area py-2">
             <b-badge class="cutome-badge mr-1" v-for="(tag, index) in badgeList" :key="index">
               {{ tag.trim() }}
@@ -72,8 +74,13 @@
 </template>
 
 <script>
+import ToolBar from "@/components/toolBar/ToolBarForSample.vue";
+
 export default {
   name: "InfoPanel",
+  components: {
+    ToolBar
+  },
   props: {
     data: Object,
     activeColorPickerPanel: Boolean

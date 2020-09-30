@@ -13,7 +13,8 @@ import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
 export default {
   name: "ModelViewer",
   props: {
-    modelObject: String
+    modelObject: String,
+    colorPalette: Object
   },
   data() {
     return {
@@ -48,6 +49,14 @@ export default {
         }
       }
     };
+  },
+  watch: {
+    colorPalette: {
+      handler() {
+        this.updateMaterialTexture();
+      },
+      deep: true
+    }
   },
   mounted() {
     this.init();
@@ -186,7 +195,7 @@ export default {
 
       // this.updateEnvironmentTexture();
       this.updateLights();
-      // this.updateMaterialTexture();
+      this.updateMaterialTexture();
     },
     updateLights() {
       const state = this.state;
@@ -246,115 +255,125 @@ export default {
         );
       });
     },
+    // updateMaterialTexture() {
+    //   const textures = {
+    //     map: {
+    //       url: "PBR_TestBox_lambert1_BaseColor.png",
+    //       value: null
+    //     },
+    //     normalMap: {
+    //       url: "PBR_TestBox_lambert1_Normal.png",
+    //       value: null
+    //     },
+    //     roughnessMap: {
+    //       url: "PBR_TestBox_lambert1_TEST.png",
+    //       value: null
+    //     },
+    //     metalnessMap: {
+    //       url: "PBR_TestBox_lambert1_TEST.png",
+    //       value: null
+    //     }
+    //   };
+
+    //   const texturePromises = [];
+
+    //   const manager = new Three.LoadingManager();
+
+    //   manager.setURLModifier(url => {
+    //     return "/materialball/static/PBR_TestBox/" + url;
+    //   });
+
+    //   const loader = new Three.TextureLoader(manager);
+
+    //   for (let key in textures) {
+    //     texturePromises.push(
+    //       new Promise((resolve, reject) => {
+    //         const entry = textures[key];
+    //         const url = entry.url;
+
+    //         loader.load(
+    //           url,
+    //           texture => {
+    //             entry.value = texture;
+    //             resolve(entry);
+    //           },
+    //           undefined,
+    //           reject
+    //         );
+    //       })
+    //     );
+    //   }
+
+    //   Promise.all(texturePromises).then(() => {
+    //     const material = new Three.MeshStandardMaterial({
+    //       color: 0x7f7f7f,
+    //       map: textures.map.value,
+    //       normalMap: textures.normalMap.value,
+    //       roughnessMap: textures.roughnessMap.value,
+    //       metalnessMap: textures.metalnessMap.value,
+    //       metalness: 1
+    //     });
+
+    //     this.content.traverse(o => {
+    //       if (o.isMesh) {
+    //         o.castShadow = true;
+    //         o.receiveShadow = true;
+    //         o.material = material;
+    //         o.material.map.encoding = Three.sRGBEncoding;
+    //         o.material.map.format = Three.RGBFormat;
+    //         o.material.normalMap.format = Three.RGBFormat;
+    //         o.material.roughnessMap.format = Three.RGBFormat;
+    //         o.material.metalnessMap.format = Three.RGBFormat;
+    //         o.material.needsUpdate = true;
+    //       }
+    //     });
+
+    //     this.scene.add(this.content);
+    //   });
+    // },
     updateMaterialTexture() {
+      if (!this.colorPalette || this.colorPalette.imagePath === "") return;
+
       const textures = {
         map: {
-          url: "PBR_TestBox_lambert1_BaseColor.png",
-          value: null
-        },
-        normalMap: {
-          url: "PBR_TestBox_lambert1_Normal.png",
-          value: null
-        },
-        roughnessMap: {
-          url: "PBR_TestBox_lambert1_TEST.png",
-          value: null
-        },
-        metalnessMap: {
-          url: "PBR_TestBox_lambert1_TEST.png",
+          url: this.colorPalette.imagePath || "",
           value: null
         }
       };
 
-      const texturePromises = [];
+      const textureLoader = new Three.TextureLoader();
 
-      const manager = new Three.LoadingManager();
+      const texturePromise = new Promise((resolve, reject) => {
+        const entry = textures.map;
+        const url = entry.url;
 
-      manager.setURLModifier(url => {
-        return "/materialball/static/PBR_TestBox/" + url;
+        textureLoader.load(
+          url,
+          texture => {
+            entry.value = texture;
+            resolve(entry);
+          },
+          undefined,
+          reject
+        );
       });
 
-      const loader = new Three.TextureLoader(manager);
-
-      for (let key in textures) {
-        texturePromises.push(
-          new Promise((resolve, reject) => {
-            const entry = textures[key];
-            const url = entry.url;
-
-            loader.load(
-              url,
-              texture => {
-                entry.value = texture;
-                resolve(entry);
-              },
-              undefined,
-              reject
-            );
-          })
-        );
-      }
-
-      Promise.all(texturePromises).then(() => {
+      texturePromise.then(() => {
         const material = new Three.MeshStandardMaterial({
-          color: 0x7f7f7f,
-          map: textures.map.value,
-          normalMap: textures.normalMap.value,
-          roughnessMap: textures.roughnessMap.value,
-          metalnessMap: textures.metalnessMap.value,
-          metalness: 1
+          map: textures.map.value
         });
 
         this.content.traverse(o => {
           if (o.isMesh) {
-            o.castShadow = true;
-            o.receiveShadow = true;
             o.material = material;
             o.material.map.encoding = Three.sRGBEncoding;
             o.material.map.format = Three.RGBFormat;
-            o.material.normalMap.format = Three.RGBFormat;
-            o.material.roughnessMap.format = Three.RGBFormat;
-            o.material.metalnessMap.format = Three.RGBFormat;
             o.material.needsUpdate = true;
           }
         });
 
         this.scene.add(this.content);
       });
-      // const textureLoader = new Three.TextureLoader(manager);
-      // let _material = new Three.MeshStandardMaterial({
-      //   color: 0x7f7f7f,
-      //   // map: this.getMaterialTexture("PBR_TestBox_lambert1_BaseColor.png").then(t => t)
-      // });
-      // this.getMaterialTexture("PBR_TestBox_lambert1_BaseColor.png").then(({ texture }) => {
-      //   _material.map = texture;
-      // });
-      // console.log(_material);
-      // // this.traverseMaterials(this.content, material => {
-      // //   material = _material;
-      // //   if (material.map) material.map.encoding = Three.sRGBEncoding;
-      // //   material.needsUpdate = true;
-      // // });
-      // // console.log(_material);
-      // // this.getMaterialTexture("PBR_TestBox_lambert1_BaseColor.png").then((t) => {
-      // //   _material.map = t;
-      // // });
-      // // console.log(a);
-      // this.content.traverse(o => {
-      //     if (o.isMesh) {
-      //       o.castShadow = true;
-      //       o.receiveShadow = true;
-      //       o.material = _material;
-      //       console.log(o.material);
-      //       o.material.map.encoding = Three.sRGBEncoding;
-      //       o.material.map.format = Three.RGBFormat;
-      //       o.material.normalMap.format = Three.RGBFormat;
-      //       o.material.roughnessMap.format = Three.RGBFormat;
-      //       o.material.metalnessMap.format = Three.RGBFormat;
-      //       o.material.needsUpdate = true;
-      //     }
-      //   });
-      // this.scene.add(this.content);
     },
     getMaterialTexture(url) {
       return new Promise((resolve, reject) => {

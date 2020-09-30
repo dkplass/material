@@ -52,13 +52,21 @@
             camera-controls=""
             alt="A 3D model"
           ></model-viewer> -->
-          <ModelViewer v-if="activeColorPickerPanel" :modelObject="modelObject"></ModelViewer>
+          <ModelViewer
+            v-if="activeColorPickerPanel"
+            :modelObject="modelObject"
+            :colorPalette="colorPalette"
+          ></ModelViewer>
         </swiper-slide>
         <div class="swiper-pagination" slot="pagination"></div>
       </swiper>
 
       <!-- 色彩樣本選擇器 -->
-      <SamplePicker v-if="activeColorPickerPanel"></SamplePicker>
+      <SamplePicker
+        v-if="activeColorPickerPanel"
+        :data="data"
+        @switchPalette="switchPalette"
+      ></SamplePicker>
     </div>
     <div v-if="layerActive" class="layer" @click="closeLayer"></div>
     <sidebar
@@ -126,7 +134,8 @@ export default {
       sidebarActive: false, // 打開側欄
       layerActive: false, // 打開遮罩
 
-      activeColorPickerPanel: false
+      activeColorPickerPanel: false,
+      colorPalette: null
     };
   },
   beforeRouteEnter(to, from, next) {
@@ -194,8 +203,8 @@ export default {
     },
     async download() {
       // 檢查下載檔案是否存在 正常 status 為 200 才下載
-      // const res = await fetch(this.publicPath).then(response => response.status === 200);
-      const res = true;
+      const res = await fetch(this.publicPath).then(response => response.status === 200);
+      // const res = true;
 
       if (res) {
         const link = document.createElement("a");
@@ -253,6 +262,9 @@ export default {
     },
     displayModel(model) {
       this.modelObject = model;
+    },
+    switchPalette(value) {
+      this.colorPalette = value;
     }
   }
 };

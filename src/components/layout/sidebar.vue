@@ -4,13 +4,15 @@
       <!-- <b-button class="mr-2" v-if="!sidebarTogglable">
         <font-awesome-icon :icon="['fas', 'bars']" />
       </b-button> -->
-      <div class="block-container h-50">
-        <b-button class="px-1">
-          <font-awesome-icon :icon="['fas', 'user']" size="lg" />
-        </b-button>
-        <b-button class="px-1" @click="routerTo">
-          <font-awesome-icon :icon="['fas', 'heart']" size="lg" />
-        </b-button>
+      <div class="block-container h-50 px-2">
+        <div class="tool-block px-2">
+          <span class="tool-btn">
+            <font-awesome-icon :icon="['fas', 'user']" size="lg" />
+          </span>
+          <span class="tool-btn" @click="routerTo">
+            <font-awesome-icon :icon="['fas', 'heart']" size="lg" />
+          </span>
+        </div>
       </div>
       <div class="block-container h-50 px-2">
         <SearchBar @closeLayer="closeLayer"></SearchBar>

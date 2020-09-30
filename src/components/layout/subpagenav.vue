@@ -20,11 +20,16 @@
         </template> -->
       </div>
       <div class="side-panel p-2">
-        <div class="block-container top h-50">
-          <b-button class="mr-2">
-            <font-awesome-icon :icon="['fas', 'user']" size="lg" />
-          </b-button>
-          <b-button class="mr-2" @click="toggleSideMenu">
+        <div class="block-container top h-50 px-2">
+          <div class="tool-block px-2">
+            <span class="tool-btn">
+              <font-awesome-icon :icon="['fas', 'user']" size="lg" />
+            </span>
+            <span class="tool-btn" @click="routerTo">
+              <font-awesome-icon :icon="['fas', 'heart']" size="lg" />
+            </span>
+          </div>
+          <b-button class="" @click="toggleSideMenu">
             <font-awesome-icon :icon="['fas', 'bars']" size="lg" />
           </b-button>
         </div>
@@ -82,6 +87,10 @@ export default {
       } else {
         this.infoCollapsable = true;
       }
+    },
+    routerTo() {
+      this.$router.push({ name: "favorite" });
+      this.closeLayer();
     },
     toggleSideMenu() {
       this.$emit("toggleSideMenu");
