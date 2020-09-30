@@ -25,9 +25,9 @@
             <span class="tool-btn">
               <font-awesome-icon :icon="['fas', 'user']" size="lg" />
             </span>
-            <span class="tool-btn" @click="routerTo">
+            <router-link class="tool-btn" tag="span" @click.native="closeLayer" to="/favorite">
               <font-awesome-icon :icon="['fas', 'heart']" size="lg" />
-            </span>
+            </router-link>
           </div>
           <b-button class="" @click="toggleSideMenu">
             <font-awesome-icon :icon="['fas', 'bars']" size="lg" />
@@ -87,10 +87,6 @@ export default {
       } else {
         this.infoCollapsable = true;
       }
-    },
-    routerTo() {
-      this.$router.push({ name: "favorite" });
-      this.closeLayer();
     },
     toggleSideMenu() {
       this.$emit("toggleSideMenu");

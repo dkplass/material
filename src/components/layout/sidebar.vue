@@ -9,9 +9,12 @@
           <span class="tool-btn">
             <font-awesome-icon :icon="['fas', 'user']" size="lg" />
           </span>
-          <span class="tool-btn" @click="routerTo">
+          <router-link class="tool-btn" tag="span" @click.native="closeLayer" to="/favorite">
             <font-awesome-icon :icon="['fas', 'heart']" size="lg" />
-          </span>
+          </router-link>
+          <!-- <span class="tool-btn" @click="routerTo">
+            <font-awesome-icon :icon="['fas', 'heart']" size="lg" />
+          </span> -->
         </div>
       </div>
       <div class="block-container h-50 px-2">
@@ -40,10 +43,6 @@ export default {
     return {};
   },
   methods: {
-    routerTo() {
-      this.$router.push({ name: "favorite" });
-      this.closeLayer();
-    },
     closeLayer() {
       this.$emit("closeLayer");
     }

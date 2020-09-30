@@ -47,7 +47,7 @@ export default {
       favorite: "Favorite/favorite"
     }),
     isFavorite() {
-      if (this.favorite.indexOf(this.data.SampleNo) > -1) return true;
+      if (this.data && this.favorite.indexOf(this.data.SampleNo) > -1) return true;
       return false;
     }
   },

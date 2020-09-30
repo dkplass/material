@@ -9,7 +9,6 @@
         size="lg"
         @click="handleFavorite"
       />
-
       <b-tooltip target="test">Add to favorite</b-tooltip>
     </div>
   </div>
@@ -34,7 +33,7 @@ export default {
       favorite: "Favorite/favorite"
     }),
     isFavorite() {
-      if (this.favorite.indexOf(this.data.SampleNo) > -1) return true;
+      if (this.data && this.favorite.indexOf(this.data.SampleNo) > -1) return true;
       return false;
     }
   },
