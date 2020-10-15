@@ -8,12 +8,12 @@ const state = {
 
 const actions = {
   getTags({ commit }) {
-    const api = `${process.env.VUE_APP_BASE_API}/api/TagList/GetTag`;
+    const api = `${process.env.VUE_APP_BASE_API}/Tag/Get`;
 
     axios
       .get(api)
       .then(response => {
-        const tagList = response.data.Resource;
+        const tagList = response.data;
         const res = JSON.parse(tagList);
         res.forEach(element => {
           element.SeriesTagItems = element.SeriesTagItems.filter(tag => {
@@ -26,8 +26,6 @@ const actions = {
   },
   setSelectedTags({ commit }, value) {
     commit("setSelectedTags", value);
-    // commit("Sample/clearQueryText", "", { root: true });
-    // dispatch("Sample/getSamples", value, { root: true });
   }
 };
 

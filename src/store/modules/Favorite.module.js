@@ -13,8 +13,9 @@ const actions = {
     // -- get from localstorage --
     commit("GetFavorite");
   },
-  getFavoriteSamples({ state, commit }) {
-    const api = `${process.env.VUE_APP_BASE_API}/api/Sample/SampleFilterByTag`;
+  getFavoriteSamples({ commit }) {
+    // const api = `${process.env.VUE_APP_BASE_API}/api/Sample/SampleFilterByTag`;
+    const api = `${process.env.VUE_APP_BASE_API}/Sample/Get`;
     const storeFavorite = state.favorite || [];
 
     commit("ClearFavoriteSamples");
@@ -22,9 +23,9 @@ const actions = {
     commit("loading", true, { root: true });
 
     axios
-      .post(api, [])
+      .get(api)
       .then(response => {
-        const result = JSON.parse(response.data.Resource);
+        const result = response.data;
 
         const filter = result.filter(item => {
           return storeFavorite.includes(item.SampleNo);

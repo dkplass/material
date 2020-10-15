@@ -15,7 +15,9 @@ export default {
   },
   methods: {
     queryData() {
-      const condition = { value: this.value };
+      const condition = this.value;
+
+      this.$store.dispatch("TagList/setSelectedTags", []);
       this.$store.dispatch("Sample/querySamples", condition);
       this.value = "";
       this.$emit("closeLayer");

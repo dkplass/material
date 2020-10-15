@@ -38,15 +38,20 @@ export default {
   computed: {
     ...mapGetters({
       loading: "loading",
+      queryMode: "queryMode",
       selectedTags: "TagList/getSelectedTags",
       samples: "Sample/retrieveSamples"
     })
   },
   methods: {
     init() {
-      this.$store.commit("Sample/clearQueryText", "", { root: true });
-      const conditions = this.selectedTags;
-      this.$store.dispatch("Sample/getSamples", conditions);
+      if (this.queryMode === false) {
+        this.$store.commit("Sample/clearQueryText", { root: true });
+        const conditions = this.selectedTags.map(tag => tag.TagNo);
+        this.$store.dispatch("Sample/getSamples", conditions);
+      } else {
+        this.$store.commit("queryMode", false, { root: true });
+      }
     }
   }
 };

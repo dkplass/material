@@ -8,11 +8,6 @@ const routes = [
     path: "*",
     redirect: "/"
   },
-  // {
-  //   path: "/main",
-  //   name: "main",
-  //   component: () => import("@/views/index.vue")
-  // },
   {
     path: "/",
     redirect: "/main",
@@ -39,11 +34,6 @@ const routes = [
     })
   },
   // {
-  //   path: "/favorite",
-  //   name: "favorite",
-  //   component: () => import("@/views/favorite/index.vue")
-  // },
-  // {
   //   path: "/3D_Demo",
   //   name: "3d",
   //   component: () => import("@/views/three/testbox.vue")
@@ -58,29 +48,56 @@ const routes = [
   //   name: "upload",
   //   component: () => import("@/views/upload/upload.vue")
   // }
+  // {
+  //   path: "/admin",
+  //   name: "admin",
+  //   redirect: "/admin/list",
+  //   component: () => import("@/views/admin_v1/admin_demo.vue"),
+  //   children: [
+  //     {
+  //       path: "list",
+  //       name: "list",
+  //       component: () => import("@/views/admin_v1/list_demo.vue")
+  //     },
+  //     {
+  //       path: "detail",
+  //       name: "detail",
+  //       component: () => import("@/views/admin_v1/detail_demo.vue")
+  //     }
+  //   ]
+  // }
   {
     path: "/admin",
-    name: "admin",
-    redirect: "/admin/list",
-    component: () => import("@/views/admin_v1/admin_demo.vue"),
+    redirect: "/admin",
+    component: () => import("@/layout/admin/index.vue"),
     children: [
       {
-        path: "list",
-        name: "list",
-        component: () => import("@/views/admin_v1/list_demo.vue")
+        path: "/",
+        name: "admin",
+        component: () => import("@/views/admin/index.vue")
       },
       {
-        path: "detail",
-        name: "detail",
-        component: () => import("@/views/admin_v1/detail_demo.vue")
+        path: "SampleImage",
+        name: "SampleImage",
+        component: () => import("@/views/admin/SampleImage/index.vue")
+      },
+      {
+        path: "/SampleImage/detail",
+        name: "SampleImageDetail",
+        component: () => import("@/views/admin/SampleImage/detail.vue")
+      },
+      {
+        path: "SampleColor",
+        name: "SampleColor",
+        component: () => import("@/views/admin/SampleColor/index.vue")
+      },
+      {
+        path: "SampleModel",
+        name: "SampleModel",
+        component: () => import("@/views/admin/SampleModel/index.vue")
       }
     ]
   }
-  // {
-  //   path: "/admin",
-  //   component: () => import("@/layout/admin/index.vue"),
-  //   children: []
-  // }
 ];
 
 const router = new VueRouter({

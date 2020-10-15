@@ -7,44 +7,72 @@ const state = {
 };
 
 const actions = {
-  getSamples({ commit }, value) {
-    // query by tag condition
-    const api = `${process.env.VUE_APP_BASE_API}/api/Sample/SampleFilterByTag`;
-
-    commit("loading", true, { root: true });
-
-    // router.push({ name: "main" }).catch(error => error);
-
+  getSamples({ dispatch, commit }, value) {
     if (value.length === 0) {
       commit("clearSamples");
+      dispatch("retrieveAllSamples");
+    } else {
+      // query by tag condition
+      const api = `${process.env.VUE_APP_BASE_API}/Sample/FilterByTags`;
+
+      commit("loading", true, { root: true });
+
+      // router.push({ name: "main" }).catch(error => error);
+
+      // if (value.length === 0) {
+      //   commit("clearSamples");
+      // }
+
+      axios
+        .post(api, value)
+        .then(response => {
+          const result = response.data;
+          // const parseResult = JSON.parse(result);
+          commit("storeSamples", result);
+          commit("loading", false, { root: true });
+        })
+        .catch(console.error());
     }
+  },
+  querySamples({ commit }, value) {
+    // query by text condition
+    const api = `${process.env.VUE_APP_BASE_API}/Sample/FilterByText`;
+    const data = JSON.stringify(value);
+
+    commit("clearSamples");
+    commit("TagList/clearAllSelectedTags", [], { root: true });
+    commit("loading", true, { root: true });
+    commit("queryMode", true, { root: true });
+
+    router.push({ name: "main" }).catch(error => error);
+
+    var config = {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    };
 
     axios
-      .post(api, value)
+      .post(api, data, config)
       .then(response => {
-        const result = response.data.Resource;
-        const parseResult = JSON.parse(result);
-        commit("storeSamples", parseResult);
+        const result = response.data;
+        // const parseResult = JSON.parse(result);
+        commit("storeSamples", result);
+        commit("saveQueryText", value.value);
         commit("loading", false, { root: true });
       })
       .catch(console.error());
   },
-  querySamples({ commit }, value) {
-    // query by text condition
-    const api = `${process.env.VUE_APP_BASE_API}/api/Sample/SearchSamples`;
+  retrieveAllSamples({ commit }) {
+    const api = `${process.env.VUE_APP_BASE_API}/Sample/Get`;
 
-    commit("clearSamples");
     commit("loading", true, { root: true });
 
-    router.push({ name: "main" }).catch(error => error);
-
     axios
-      .post(api, value)
+      .get(api)
       .then(response => {
-        const result = response.data.Resource;
-        const parseResult = JSON.parse(result);
-        commit("storeSamples", parseResult);
-        commit("saveQueryText", value.value);
+        const result = response.data;
+        commit("storeSamples", result);
         commit("loading", false, { root: true });
       })
       .catch(console.error());

@@ -26,7 +26,7 @@
           <b-list-group-item class="collapse-content-item">
             <b-form-checkbox
               v-model="selectedTags"
-              :value="tag.TagName"
+              :value="tag"
               inline
               class="custom-control-element"
             >
@@ -59,8 +59,12 @@ export default {
       },
       deep: true
     },
-    getSelectedTags() {
-      this.$router.push({ name: "main" }).catch(error => error);
+    getSelectedTags: {
+      handler(value) {
+        this.selectedTags = value;
+        this.$router.push({ name: "main" }).catch(error => error);
+      },
+      deep: true
     }
   },
   created() {
@@ -106,7 +110,6 @@ export default {
   methods: {
     init() {
       this.$store.dispatch("TagList/getTags");
-
       this.selectedTags = this.getSelectedTags;
     },
     async clearAll() {

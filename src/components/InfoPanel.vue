@@ -133,7 +133,7 @@ export default {
       // 標籤列表
       if (!this.data) return [];
 
-      let list = this.data.Tags.split(",") || [];
+      let list = this.data.Tags.map(t => t.TagName) || [];
 
       if (!list) {
         list = [];

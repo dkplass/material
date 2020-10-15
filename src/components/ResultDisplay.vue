@@ -14,7 +14,7 @@
             class="mx-1"
             v-for="(tag, index) in getSelectedTags"
             :key="index"
-            >{{ tag }}
+            >{{ tag.TagName }}
           </b-badge>
         </div>
         <span v-else>No filters...</span>
