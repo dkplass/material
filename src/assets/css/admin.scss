@@ -1,0 +1,24 @@
+@import '@/assets/css/ThemColors.scss';
+
+.admin-panel {
+    * {
+        font-family:  -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    }
+}
+
+.admin-content {
+    color: $light-font;
+    height: 100%;
+    padding: .4rem;
+}
+
+.my-card-wrapper {
+    background-color: transparent;
+    border: none;
+  
+    .my-card-content {
+        display: flex;
+        flex-direction: column;
+    }
+}
+  
