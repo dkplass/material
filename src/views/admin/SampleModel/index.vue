@@ -228,6 +228,7 @@ export default {
       this.dragging = false;
     },
     upload() {
+      let data = JSON.parse(JSON.stringify(this.selectData));
       const formData = new FormData();
       const config = {
         headers: {
@@ -238,6 +239,8 @@ export default {
       const api = `${process.env.VUE_APP_BASE_API}/ThreeDModel/AzureUploadThreeDModel`;
 
       const directory = `${this.selectData.ModelNo}`;
+
+      data.ModelPath = `${directory}/${this.file.name}`;
 
       formData.append("file", this.file);
       formData.append("directory", directory);
@@ -259,6 +262,7 @@ export default {
               buttonSize: "sm"
             })
             .then(() => {
+              this.updateData(data);
               this.modalClose();
             })
             .catch(err => {
@@ -266,6 +270,20 @@ export default {
             });
         })
         .catch(error => error);
+    },
+    updateData(data) {
+      const api = `${process.env.VUE_APP_BASE_API}/ThreeDModel/Edit`;
+
+      this.$http
+        .post(api, data)
+        .then(response => {
+          console.log(response.data);
+
+          this.getModels();
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     modalClose() {
       this.$refs["upload-modal"].hide();

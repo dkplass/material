@@ -1,5 +1,5 @@
 <template>
-  <div class="admin-content">首頁</div>
+  <div class="admin-content">檔案上傳平台</div>
 </template>
 
 <script>

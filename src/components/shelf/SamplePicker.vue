@@ -21,7 +21,7 @@
         :data-color="palette.color"
         :class="[{ active: classActive(palette.color) }, `${palette.color}`]"
         :style="{
-          backgroundImage: `url(${palette.imagePath})`
+          backgroundImage: `url(${palette.imageThumb})`
         }"
         @click="select($event, palette)"
       ></span>
@@ -55,83 +55,98 @@ export default {
       */
       // https://materialballfile.blob.core.windows.net/material/模型基本色卡/YL-O001/YL_O001_01_PBR_Base_Color_12-0824TCX.png
       const sampleNumber = this.data.SampleNo;
-      const path = "https://materialballfile.blob.core.windows.net/material/模型基本色卡";
+      const path = `https://materialballfile.blob.core.windows.net/material/模型基本色卡/${sampleNumber}`;
       const temp = [];
 
       if (sampleNumber === "YL-O001") {
         temp[0] = {
           color: "0824TCX",
-          imagePath: `${path}/${sampleNumber}/YL_O001_01_PBR_Base_Color_12-0824TCX.png`
+          imagePath: `Bag_BA5566_game_BA5566_Body_BaseColor_7402C.png`,
+          imageThumb: `${path}/thumb/YL_O001_01_PBR_Base_Color_12-0824TCX.png`
         };
 
         temp[1] = {
           color: "1058TCX",
-          imagePath: `${path}/${sampleNumber}/YL_O001_01_PBR_Base_Color_15-1058TCX.png`
+          imagePath: `Bag_BA5566_game_BA5566_Body_BaseColor_1375C.png`,
+          imageThumb: `${path}/thumb/YL_O001_01_PBR_Base_Color_15-1058TCX.png`
         };
 
         temp[2] = {
           color: "0636TCX",
-          imagePath: `${path}/${sampleNumber}/YL_O001_01_PBR_Base_Color_17-0636TCX.png`
+          imagePath: `Bag_BA5566_game_BA5566_Body_BaseColor_7503C.png`,
+          imageThumb: `${path}/thumb/YL_O001_01_PBR_Base_Color_17-0636TCX.png`
         };
 
         temp[3] = {
           color: "4034TCX",
-          imagePath: `${path}/${sampleNumber}/YL_O001_01_PBR_Base_Color_18-4034TCX.png`
+          imagePath: `Bag_BA5566_game_BA5566_Body_BaseColor_2152C.png`,
+          imageThumb: `${path}/thumb/YL_O001_01_PBR_Base_Color_18-4034TCX.png`
         };
 
         temp[4] = {
           color: "2434TCX",
-          imagePath: `${path}/${sampleNumber}/YL_O001_01_PBR_Base_Color_19-2434TCX.png`
+          imagePath: `Bag_BA5566_game_BA5566_Body_BaseColor_675C.png`,
+          imageThumb: `${path}/thumb/YL_O001_01_PBR_Base_Color_19-2434TCX.png`
         };
       } else if (sampleNumber === "YL-O002") {
         temp[0] = {
           color: "0824TCX",
-          imagePath: `${path}/${sampleNumber}/YL_O002_01_PBR_Base_Color_12-0824TCX.png`
+          imagePath: `${path}/YL_O002_01_PBR_Base_Color_12-0824TCX.png`,
+          imageThumb: `${path}/thumb/YL_O002_01_PBR_Base_Color_12-0824TCX.png`
         };
 
         temp[1] = {
           color: "1058TCX",
-          imagePath: `${path}/${sampleNumber}/YL_O002_01_PBR_Base_Color_15-1058TCX.png`
+          imagePath: `${path}/YL_O002_01_PBR_Base_Color_15-1058TCX.png`,
+          imageThumb: `${path}/thumb/YL_O002_01_PBR_Base_Color_15-1058TCX.png`
         };
 
         temp[2] = {
           color: "0636TCX",
-          imagePath: `${path}/${sampleNumber}/YL_O002_01_PBR_Base_Color_17-0636TCX.png`
+          imagePath: `${path}/YL_O002_01_PBR_Base_Color_17-0636TCX.png`,
+          imageThumb: `${path}/thumb/YL_O002_01_PBR_Base_Color_17-0636TCX.png`
         };
 
         temp[3] = {
           color: "4034TCX",
-          imagePath: `${path}/${sampleNumber}/YL_O002_01_PBR_Base_Color_18-4034TCX.png`
+          imagePath: `${path}/YL_O002_01_PBR_Base_Color_18-4034TCX.png`,
+          imageThumb: `${path}/thumb/YL_O002_01_PBR_Base_Color_18-4034TCX.png`
         };
 
         temp[4] = {
           color: "2434TCX",
-          imagePath: `${path}/${sampleNumber}/YL_O002_01_PBR_Base_Color_19-2434TCX.png`
+          imagePath: `${path}/YL_O002_01_PBR_Base_Color_19-2434TCX.png`,
+          imageThumb: `${path}/thumb/YL_O002_01_PBR_Base_Color_19-2434TCX.png`
         };
       } else {
         temp[0] = {
           color: "red",
-          imagePath: ""
+          imagePath: "",
+          imageThumb: ""
         };
 
         temp[1] = {
           color: "pink",
-          imagePath: ""
+          imagePath: "",
+          imageThumb: ""
         };
 
         temp[2] = {
           color: "green",
-          imagePath: ""
+          imagePath: "",
+          imageThumb: ""
         };
 
         temp[3] = {
           color: "blue",
-          imagePath: ""
+          imagePath: "",
+          imageThumb: ""
         };
 
         temp[4] = {
           color: "orange",
-          imagePath: ""
+          imagePath: "",
+          imageThumb: ""
         };
       }
 

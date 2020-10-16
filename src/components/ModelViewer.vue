@@ -1,10 +1,19 @@
 <template>
-  <div id="scene-container" ref="sceneContainer"></div>
+  <div id="scene-container" ref="sceneContainer">
+    <div id="hint-message" v-if="textureLoaded">Applying Texture ...</div>
+    <transition name="fade">
+      <div id="loader-wrapper" v-if="glbLoadingPercent < 101">
+        <div id="percent">{{ glbLoadingPercent }}%</div>
+        <div id="loader"></div>
+      </div>
+    </transition>
+  </div>
 </template>
 
 <script>
 import * as Three from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader";
@@ -18,6 +27,9 @@ export default {
   },
   data() {
     return {
+      glbLoadingPercent: 0,
+      textureLoaded: false,
+
       container: null,
       scene: null,
       camera: null,
@@ -59,8 +71,14 @@ export default {
     }
   },
   mounted() {
-    this.init();
-    this.loadGLTF();
+    // delay for slider change
+    let vm = this;
+    setTimeout(() => {
+      vm.init();
+      vm.loadGLTF();
+      // vm.loadFBX();
+    }, 3000);
+
     this.$nextTick(() => {
       window.addEventListener("resize", this.resize, false);
     });
@@ -129,10 +147,35 @@ export default {
             const _obj = obj;
 
             this.setContent(_obj);
-            // this.scene.add(_obj);
+
             resolve(_obj);
           },
           undefined,
+          reject
+        );
+      });
+    },
+    loadFBX() {
+      return new Promise((resolve, reject) => {
+        const loader = new FBXLoader();
+
+        loader.load(
+          "https://materialballfile.blob.core.windows.net/material/模型/YL-O009/Bag_BA5566.fbx",
+          fbx => {
+            const scene = fbx;
+
+            this.setContent(scene);
+
+            resolve(fbx);
+          },
+          xhr => {
+            this.glbLoadingPercent = Math.round((xhr.loaded / xhr.total) * 100 * 10) / 10;
+
+            let vm = this;
+            setTimeout(() => {
+              vm.glbLoadingPercent += 1;
+            }, 1000);
+          },
           reject
         );
       });
@@ -152,7 +195,7 @@ export default {
         loader.setDRACOLoader(dracoLoader);
 
         loader.load(
-          "/materialball/static/YL-O009_M0545.glb",
+          "https://materialballfile.blob.core.windows.net/material/模型/YL-O009/YL-O009_M0545.glb",
           gltf => {
             const scene = gltf.scene;
 
@@ -160,7 +203,14 @@ export default {
 
             resolve(gltf);
           },
-          undefined,
+          xhr => {
+            this.glbLoadingPercent = Math.round((xhr.loaded / xhr.total) * 100 * 10) / 10;
+
+            let vm = this;
+            setTimeout(() => {
+              vm.glbLoadingPercent += 1;
+            }, 1000);
+          },
           reject
         );
       });
@@ -255,126 +305,139 @@ export default {
         );
       });
     },
-    // updateMaterialTexture() {
-    //   const textures = {
-    //     map: {
-    //       url: "PBR_TestBox_lambert1_BaseColor.png",
-    //       value: null
-    //     },
-    //     normalMap: {
-    //       url: "PBR_TestBox_lambert1_Normal.png",
-    //       value: null
-    //     },
-    //     roughnessMap: {
-    //       url: "PBR_TestBox_lambert1_TEST.png",
-    //       value: null
-    //     },
-    //     metalnessMap: {
-    //       url: "PBR_TestBox_lambert1_TEST.png",
-    //       value: null
-    //     }
-    //   };
-
-    //   const texturePromises = [];
-
-    //   const manager = new Three.LoadingManager();
-
-    //   manager.setURLModifier(url => {
-    //     return "/materialball/static/PBR_TestBox/" + url;
-    //   });
-
-    //   const loader = new Three.TextureLoader(manager);
-
-    //   for (let key in textures) {
-    //     texturePromises.push(
-    //       new Promise((resolve, reject) => {
-    //         const entry = textures[key];
-    //         const url = entry.url;
-
-    //         loader.load(
-    //           url,
-    //           texture => {
-    //             entry.value = texture;
-    //             resolve(entry);
-    //           },
-    //           undefined,
-    //           reject
-    //         );
-    //       })
-    //     );
-    //   }
-
-    //   Promise.all(texturePromises).then(() => {
-    //     const material = new Three.MeshStandardMaterial({
-    //       color: 0x7f7f7f,
-    //       map: textures.map.value,
-    //       normalMap: textures.normalMap.value,
-    //       roughnessMap: textures.roughnessMap.value,
-    //       metalnessMap: textures.metalnessMap.value,
-    //       metalness: 1
-    //     });
-
-    //     this.content.traverse(o => {
-    //       if (o.isMesh) {
-    //         o.castShadow = true;
-    //         o.receiveShadow = true;
-    //         o.material = material;
-    //         o.material.map.encoding = Three.sRGBEncoding;
-    //         o.material.map.format = Three.RGBFormat;
-    //         o.material.normalMap.format = Three.RGBFormat;
-    //         o.material.roughnessMap.format = Three.RGBFormat;
-    //         o.material.metalnessMap.format = Three.RGBFormat;
-    //         o.material.needsUpdate = true;
-    //       }
-    //     });
-
-    //     this.scene.add(this.content);
-    //   });
-    // },
     updateMaterialTexture() {
       if (!this.colorPalette || this.colorPalette.imagePath === "") return;
+
+      this.textureLoaded = true;
+
+      const basicPath =
+        "https://materialballfile.blob.core.windows.net/material/模型/YL-O009/texture/";
 
       const textures = {
         map: {
           url: this.colorPalette.imagePath || "",
           value: null
+        },
+        normalMap: {
+          url: `Bag_BA5566_game_BA5566_Body_Normal.png`,
+          value: null
+        },
+        roughnessMap: {
+          url: `Bag_BA5566_game_BA5566_Body_Roughness.png`,
+          value: null
+        },
+        metalnessMap: {
+          url: `Bag_BA5566_game_BA5566_Body_Metallic.png`,
+          value: null
         }
       };
 
-      const textureLoader = new Three.TextureLoader();
+      const texturePromises = [];
 
-      const texturePromise = new Promise((resolve, reject) => {
-        const entry = textures.map;
-        const url = entry.url;
+      const manager = new Three.LoadingManager();
 
-        textureLoader.load(
-          url,
-          texture => {
-            entry.value = texture;
-            resolve(entry);
-          },
-          undefined,
-          reject
-        );
+      manager.setURLModifier(url => {
+        return `${basicPath}${url}`;
       });
 
-      texturePromise.then(() => {
+      const loader = new Three.TextureLoader(manager);
+
+      for (let key in textures) {
+        texturePromises.push(
+          new Promise((resolve, reject) => {
+            const entry = textures[key];
+            const url = entry.url;
+
+            loader.load(
+              url,
+              texture => {
+                entry.value = texture;
+                resolve(entry);
+              },
+              undefined,
+              reject
+            );
+          })
+        );
+      }
+
+      Promise.all(texturePromises).then(() => {
         const material = new Three.MeshStandardMaterial({
-          map: textures.map.value
+          color: 0x7f7f7f,
+          map: textures.map.value,
+          normalMap: textures.normalMap.value,
+          roughnessMap: textures.roughnessMap.value,
+          metalnessMap: textures.metalnessMap.value,
+          metalness: 1
         });
 
         this.content.traverse(o => {
           if (o.isMesh) {
+            o.castShadow = true;
+            o.receiveShadow = true;
             o.material = material;
             o.material.map.encoding = Three.sRGBEncoding;
             o.material.map.format = Three.RGBFormat;
+            o.material.normalMap.format = Three.RGBFormat;
+            o.material.roughnessMap.format = Three.RGBFormat;
+            o.material.metalnessMap.format = Three.RGBFormat;
             o.material.needsUpdate = true;
           }
         });
 
         this.scene.add(this.content);
+
+        this.textureLoaded = false;
       });
     },
+    // updateMaterialTexture() {
+    //   if (!this.colorPalette || this.colorPalette.imagePath === "") return;
+
+    //   this.textureLoaded = true;
+
+    //   const textures = {
+    //     map: {
+    //       url: this.colorPalette.imagePath || "",
+    //       value: null
+    //     }
+    //   };
+
+    //   const textureLoader = new Three.TextureLoader();
+
+    //   const texturePromise = new Promise((resolve, reject) => {
+    //     const entry = textures.map;
+    //     const url = entry.url;
+
+    //     textureLoader.load(
+    //       url,
+    //       texture => {
+    //         entry.value = texture;
+    //         resolve(entry);
+    //       },
+    //       undefined,
+    //       reject
+    //     );
+    //   });
+
+    //   texturePromise.then(() => {
+    //     const material = new Three.MeshStandardMaterial({
+    //       map: textures.map.value
+    //     });
+
+    //     this.content.traverse(o => {
+    //       if (o.isMesh) {
+    //         o.material = material;
+    //         o.material.map.encoding = Three.sRGBEncoding;
+    //         o.material.map.format = Three.RGBFormat;
+    //         o.material.needsUpdate = true;
+    //       }
+    //     });
+
+    //     this.scene.add(this.content);
+
+    //     this.textureLoaded = false;
+    //   });
+    // },
     getMaterialTexture(url) {
       return new Promise((resolve, reject) => {
         const manager = new Three.LoadingManager();
@@ -458,6 +521,111 @@ export default {
 #scene-container {
   width: 100%;
   height: 100%;
+  position: relative;
   overflow: hidden;
+}
+
+#loader-wrapper {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+}
+
+#hint-message {
+  position: absolute;
+  top: 0;
+  text-align: center;
+  width: 100%;
+  background-color: rgba($color: #ffffff, $alpha: 0.2);
+}
+
+#loader {
+  display: block;
+  position: relative;
+  left: 50%;
+  top: 50%;
+  width: 150px;
+  height: 150px;
+  margin: -75px 0 0 -75px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  border-top-color: #457b9d;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+
+  &:before {
+    content: "";
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: #a8dadc;
+    -webkit-animation: spin 3s linear infinite;
+    animation: spin 3s linear infinite;
+  }
+
+  &:after {
+    content: "";
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    right: 15px;
+    bottom: 15px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: #f1faee;
+    -webkit-animation: spin 1.5s linear infinite;
+    animation: spin 1.5s linear infinite;
+  }
+}
+
+#percent {
+  display: inline;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.8rem;
+}
+
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 </style>
