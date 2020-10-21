@@ -1,5 +1,8 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import createPersistedState from "vuex-persistedstate";
+import { Authenticate } from "./modules/authenticate.module";
+import { User } from "./modules/User.module";
 import { TagList } from "./modules/TagList.module";
 import { Sample } from "./modules/Sample.module";
 import { Favorite } from "./modules/Favorite.module";
@@ -12,7 +15,8 @@ export default new Vuex.Store({
   strict: process.env.NODE_ENV !== "production",
   state: {
     isLoading: false,
-    isQueryMode: false
+    isQueryMode: false,
+    isLoginModal: false
   },
   actions: {
     updateLoading(context, status) {
@@ -20,6 +24,9 @@ export default new Vuex.Store({
     },
     toggleQueryMode(context) {
       context.commit("queryMode", status);
+    },
+    toggleLoginModal(context) {
+      context.commit("toggleLoginModal");
     }
   },
   mutations: {
@@ -28,6 +35,9 @@ export default new Vuex.Store({
     },
     queryMode(state, status) {
       state.isQueryMode = status;
+    },
+    toggleLoginModal(state) {
+      state.isLoginModal = !state.isLoginModal;
     }
   },
   getters: {
@@ -36,13 +46,24 @@ export default new Vuex.Store({
     },
     queryMode(state) {
       return state.isQueryMode;
+    },
+    loginModal(state) {
+      return state.isLoginModal;
     }
   },
   modules: {
+    Authenticate,
+    User,
     TagList,
     Sample,
     Favorite,
     FilePath,
     SampleColor
-  }
+  },
+  plugins: [
+    createPersistedState({
+      storage: window.localStorage,
+      paths: ["Authenticate", "User"]
+    })
+  ]
 });

@@ -15,9 +15,17 @@
           <!-- 加入最愛功能 -->
           <ToolBar v-show="true" :data="data"></ToolBar>
           <div class="badge-area py-2">
-            <b-badge class="cutome-badge mr-1" v-for="(tag, index) in badgeList" :key="index">
-              {{ tag.trim() }}
-            </b-badge>
+            <template v-if="tagListIsabled === false">
+              <span>No permission to read tags data.</span>
+            </template>
+            <template v-else-if="badgeList.length > 0">
+              <b-badge class="cutome-badge mr-1" v-for="(tag, index) in badgeList" :key="index">
+                {{ tag.trim() }}
+              </b-badge>
+            </template>
+            <template v-else>
+              <span>This sample has no tags.</span>
+            </template>
           </div>
           <div class="py-2">
             <button class="btn download-button" @click="download">
@@ -41,27 +49,6 @@
             "
             :key="index"
           ></div>
-          <!-- <div
-            class="picker-item"
-            :style="{
-              backgroundImage: 'url(./static/model_thumb/model_2.png)'
-            }"
-            @click="handleIndicator($event.target)"
-          ></div>
-          <div
-            class="picker-item"
-            :style="{
-              backgroundImage: 'url(./static/model_thumb/model_3.png)'
-            }"
-            @click="handleIndicator($event.target)"
-          ></div>
-          <div
-            class="picker-item"
-            :style="{
-              backgroundImage: 'url(./static/model_thumb/model_4.png)'
-            }"
-            @click="handleIndicator($event.target)"
-          ></div> -->
           <i class="active-indicator"></i>
         </div>
       </template>
@@ -74,6 +61,7 @@
 </template>
 
 <script>
+import { isAbleToRead } from "@/utils/hasAuthenticate";
 import ToolBar from "@/components/toolBar/ToolBarForSample.vue";
 
 export default {
@@ -129,13 +117,23 @@ export default {
     window.removeEventListener("resize", this.initIndicator);
   },
   computed: {
+    tagListIsabled() {
+      return isAbleToRead("TagList");
+    },
     badgeList() {
-      // 標籤列表
+      /**
+       * 標籤列表
+       * 如果沒有權限回傳空陣列
+       * @return { Array }
+       */
+
       if (!this.data) return [];
+
+      const isabled = this.tagListIsabled;
 
       let list = this.data.Tags.map(t => t.TagName) || [];
 
-      if (!list) {
+      if (!isabled) {
         list = [];
       }
 

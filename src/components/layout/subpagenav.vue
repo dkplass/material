@@ -22,12 +22,12 @@
       <div class="side-panel p-2">
         <div class="block-container top h-50 px-2">
           <div class="tool-block px-2">
-            <span class="tool-btn">
+            <span class="tool-btn" @click="loginReDirect">
               <font-awesome-icon :icon="['fas', 'user']" size="lg" />
             </span>
-            <router-link class="tool-btn" tag="span" @click.native="closeLayer" to="/favorite">
+            <span class="tool-btn" @click="favoriteReDirect">
               <font-awesome-icon :icon="['fas', 'heart']" size="lg" />
-            </router-link>
+            </span>
           </div>
           <b-button class="" @click="toggleSideMenu">
             <font-awesome-icon :icon="['fas', 'bars']" size="lg" />
@@ -52,6 +52,7 @@
 </template>
 
 <script>
+import { isAbleToRead } from "@/utils/hasAuthenticate";
 import SearchBar from "@/components/SearchBar.vue";
 
 export default {
@@ -77,8 +78,26 @@ export default {
     window.removeEventListener("resize", this.detectiveInfoDisplay);
     next();
   },
-  computed: {},
+  computed: {
+    favoriteIsabled() {
+      return isAbleToRead("Favorite");
+    }
+  },
   methods: {
+    loginReDirect() {
+      // this.$store.dispatch("toggleLoginModal");
+      if (this.$store.state.Authenticate.isLogin === false) {
+        this.$router.push("login");
+      } else {
+        this.$store.dispatch("toggleLoginModal");
+      }
+    },
+    favoriteReDirect() {
+      if (this.favoriteIsabled === false) return;
+
+      this.closeLayer();
+      this.$router.push("favorite");
+    },
     detectiveInfoDisplay() {
       const windowWidth = window.innerWidth;
 

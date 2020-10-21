@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import { isAbleToRead } from "@/utils/hasAuthenticate";
 import { mapGetters } from "vuex";
 
 export default {
@@ -33,12 +34,19 @@ export default {
       favorite: "Favorite/favorite"
     }),
     isFavorite() {
-      if (this.data && this.favorite.indexOf(this.data.SampleNo) > -1) return true;
+      if (this.data && this.favorite.indexOf(this.data.SampleNo) > -1 && this.favoriteIsabled)
+        return true;
       return false;
+    },
+    favoriteIsabled() {
+      return isAbleToRead("Favorite");
     }
   },
   methods: {
     handleFavorite() {
+      // 驗證權限
+      if (this.favoriteIsabled === false) return;
+
       // 新增或移除最愛
       this.$store.dispatch("Favorite/handleFavorite", this.data.SampleNo);
       this.toolBarExtending = false;

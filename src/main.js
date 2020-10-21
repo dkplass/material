@@ -18,6 +18,8 @@ import "@google/model-viewer/dist/model-viewer";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
+import api from "./apis/index";
+import "@/directive/index";
 
 Vue.use(BootstrapVue);
 Vue.use(VueAxios, axios);
@@ -30,6 +32,8 @@ Vue.component("font-awesome-icon", FontAwesomeIcon);
 
 Vue.config.productionTip = false;
 
+Vue.prototype.$api = api; // 掛載api到vue原型上
+
 new Vue({
   router,
   store,
@@ -38,7 +42,3 @@ new Vue({
   // },
   render: h => h(App)
 }).$mount("#app");
-
-router.beforeEach((to, from, next) => {
-  next();
-});

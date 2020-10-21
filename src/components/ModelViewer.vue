@@ -17,6 +17,7 @@ import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader";
+import { EXRLoader } from "three/examples/jsm/loaders/EXRLoader";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
 
 export default {
@@ -38,6 +39,8 @@ export default {
       content: null,
       material: null,
       pmremGenerator: null,
+      exrCubeRenderTarget: null,
+      exrBackground: null,
       geometry: null,
       lights: [],
       state: {
@@ -286,11 +289,29 @@ export default {
     },
     updateEnvironmentTexture() {
       this.getEnvironmentTexture().then(({ envMap }) => {
-        // this.scene.background = envMap;
         this.scene.environment = envMap;
+        this.scene.background = envMap.texture;
+
+        this.material.envMap = envMap.texture;
+        this.material.needsUpdate = true;
       });
     },
     getEnvironmentTexture() {
+      return new Promise((resolve, reject) => {
+        new EXRLoader().setDataType(Three.UnsignedByteType).load(
+          "https://materialballfile.blob.core.windows.net/material/模型/Tomoco Studio.exr",
+          texture => {
+            const envMap = this.pmremGenerator.fromEquirectangular(texture);
+            texture.dispose();
+
+            resolve({ envMap });
+          },
+          undefined,
+          reject
+        );
+      });
+    },
+    HDRgetEnvironmentTexture() {
       return new Promise((resolve, reject) => {
         new RGBELoader().setDataType(Three.UnsignedByteType).load(
           "/materialball/static/PBR_TestBox/GSG_PRO_STUDIOS_METAL_008_sm.hdr",

@@ -6,15 +6,15 @@
       </b-button> -->
       <div class="block-container h-50 px-2">
         <div class="tool-block px-2">
-          <span class="tool-btn">
+          <span class="tool-btn" @click="loginReDirect">
             <font-awesome-icon :icon="['fas', 'user']" size="lg" />
           </span>
-          <router-link class="tool-btn" tag="span" @click.native="closeLayer" to="/favorite">
+          <!-- <router-link class="tool-btn" tag="span" @click.native="closeLayer" to="/favorite">
             <font-awesome-icon :icon="['fas', 'heart']" size="lg" />
-          </router-link>
-          <!-- <span class="tool-btn" @click="routerTo">
+          </router-link> -->
+          <span class="tool-btn" @click="favoriteReDirect">
             <font-awesome-icon :icon="['fas', 'heart']" size="lg" />
-          </span> -->
+          </span>
         </div>
       </div>
       <div class="block-container h-50 px-2">
@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import { isAbleToRead } from "@/utils/hasAuthenticate";
 import SearchBar from "@/components/SearchBar.vue";
 import SidebarContent from "@/components/layout/SidebarContent.vue";
 
@@ -42,7 +43,26 @@ export default {
   data() {
     return {};
   },
+  computed: {
+    favoriteIsabled() {
+      return isAbleToRead("Favorite");
+    }
+  },
   methods: {
+    loginReDirect() {
+      // this.$store.dispatch("toggleLoginModal");
+      if (this.$store.state.Authenticate.isLogin === false) {
+        this.$router.push("login");
+      } else {
+        this.$store.dispatch("toggleLoginModal");
+      }
+    },
+    favoriteReDirect() {
+      if (this.favoriteIsabled === false) return;
+
+      this.closeLayer();
+      this.$router.push("favorite");
+    },
     closeLayer() {
       this.$emit("closeLayer");
     }

@@ -1,17 +1,21 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import store from "../store/index";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
-    path: "*",
-    redirect: "/"
+    path: "/login",
+    name: "login",
+    meta: { requiresAuth: false },
+    component: () => import("@/views/login.vue")
   },
   {
-    path: "/",
+    path: "/main",
     redirect: "/main",
     component: () => import("@/layout/main.vue"),
+    meta: { requiresAuth: false },
     children: [
       {
         path: "/main",
@@ -28,6 +32,7 @@ const routes = [
   {
     path: "/sample",
     name: "sample",
+    meta: { requiresAuth: false },
     component: () => import("@/views/sample/sample.vue"),
     props: route => ({
       ...route.params
@@ -70,6 +75,7 @@ const routes = [
     path: "/admin",
     redirect: "/admin",
     component: () => import("@/layout/admin/index.vue"),
+    meta: { requiresAuth: true },
     children: [
       {
         path: "/",
@@ -97,6 +103,10 @@ const routes = [
         component: () => import("@/views/admin/SampleModel/index.vue")
       }
     ]
+  },
+  {
+    path: "*",
+    redirect: "/login"
   }
 ];
 
@@ -104,6 +114,23 @@ const router = new VueRouter({
   mode: "history",
   base: "/materialball/",
   routes
+});
+
+router.beforeEach((to, from, next) => {
+  // 如果 router 轉跳的頁面需要驗證 requiresAuth: true
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    // 如果沒有 token
+    const token = store.state.Authenticate.token;
+
+    if (token === "") {
+      // 轉跳到 login page
+      next({ path: "/login" });
+    } else {
+      next(); // 往下繼續執行
+    }
+  } else {
+    next();
+  }
 });
 
 export default router;
