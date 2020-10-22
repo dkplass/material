@@ -40,13 +40,13 @@
             class="slider-background-first"
           ></div>
         </swiper-slide>
-        <swiper-slide>
+        <swiper-slide v-if="fabricMeshIsabled">
           <div
             :style="{ backgroundImage: `url(${imgListLarge[1]})` }"
             class="slider-background-second"
           ></div>
         </swiper-slide>
-        <swiper-slide>
+        <swiper-slide ref="viewerSwipe" class="viewer-swipe">
           <!-- <model-viewer
             src="https://raw.githubusercontent.com/dkplass/dkplass.github.io/master/YL-O009_M0545.glb"
             camera-controls=""
@@ -80,6 +80,7 @@
 </template>
 
 <script>
+import { isAbleToRead } from "@/utils/hasAuthenticate";
 import sidebar from "@/components/layout/sidebar.vue";
 import subnavbar from "@/components/layout/subpagenav.vue";
 import SidebarContent from "@/components/layout/SidebarContent.vue";
@@ -167,6 +168,9 @@ export default {
   computed: {
     swiper() {
       return this.$refs.mySwiper.$swiper;
+    },
+    fabricMeshIsabled() {
+      return isAbleToRead("FabricMesh");
     }
   },
   methods: {
@@ -250,14 +254,14 @@ export default {
       // 控制在特定slide position會有特定功能
       // 在3D view位置關閉觸控滑動功能、顯示樣品選擇工具列
       const _swiper = this.swiper;
-      const index = _swiper.realIndex;
+      const viewerSwipeClassList = this.$refs.viewerSwipe.$el.classList;
 
-      if (index === 2) {
-        _swiper.allowTouchMove = false;
-        this.activeColorPickerPanel = true;
-      } else {
+      if (viewerSwipeClassList.contains("swiper-slide-active")) {
         _swiper.allowTouchMove = true;
         this.activeColorPickerPanel = false;
+      } else {
+        _swiper.allowTouchMove = false;
+        this.activeColorPickerPanel = true;
       }
     },
     displayModel(model) {

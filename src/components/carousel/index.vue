@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import { isAbleToRead } from "@/utils/hasAuthenticate";
 import ToolBar from "@/components/toolBar/ToolBar.vue";
 
 export default {
@@ -37,11 +38,6 @@ export default {
   },
   data() {
     return {
-      imgList: [
-        `http://182.52.70.198:8080/MaterialImg/${this.data.SampleNo}/${this.data.SampleNo}-01.png`,
-        `http://182.52.70.198:8080/MaterialImg/${this.data.SampleNo}/${this.data.SampleNo}-02.png`,
-        `http://182.52.70.198:8080/MaterialImg/${this.data.SampleNo}/${this.data.SampleNo}-03.png`
-      ],
       slideIndex: 0,
       isHover: false
     };
@@ -54,6 +50,9 @@ export default {
     }
   },
   computed: {
+    fabricMeshIsabled() {
+      return isAbleToRead("FabricMesh");
+    },
     countInterval() {
       let time = 0;
       const windowWidth = window.innerWidth;
@@ -69,10 +68,15 @@ export default {
       const list = [];
 
       for (let i = 1; i <= 3; i++) {
+        if (this.fabricMeshIsabled === false && i === 2) continue;
         list[i - 1] = `${path}/${this.data.SampleNo}/${this.data.SampleNo}-0${i}.png`;
       }
 
-      return list;
+      const filtered = list.filter(function(elements) {
+        return elements != null;
+      });
+
+      return filtered;
     },
     display() {
       if (this.isMobile() === true) {

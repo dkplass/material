@@ -1,4 +1,5 @@
 // TODO: 必須用API動態取回權限清單
+/*
 const permissionsList = [
   {
     LocationNo: "L001",
@@ -40,7 +41,12 @@ const permissionsList = [
     LocationName: "3D模型套色",
     LocationClass: "ModelColorProcess"
   }
-];
+];*/
+
+/**
+ * 權限需要操作 DOM 才需使用 v-can
+ * 其他驗證使用 util/hasAuthenticate 判斷
+ */
 
 export default {
   bind: function(el, binding, vnode) {
@@ -49,21 +55,34 @@ export default {
     console.log(vnode);
 
     // FIXME: 處理 user null
-    const storedData = JSON.parse(localStorage.getItem("vuex"));
+    const storedData = JSON.parse(localStorage.getItem("vuex")) || {};
 
     // FIXME: 處理 MemberLocations null
-    const permissions = storedData.User.user.MemberLocations;
+    let permissions = [];
+
+    if (storedData.User && storedData.User.user) {
+      permissions = storedData.User.user.MemberLocations;
+    }
     console.log(permissions);
 
     const target = binding.value;
     console.log(target);
-
-    console.log(permissionsList);
 
     // TODO: target 核對 permissions，不符合的隱藏或disable
     const permissionItem = permissions.find(
       p => p.LocationClass.toLowerCase() === target.toLowerCase()
     );
     console.log(permissionItem);
+
+    // undefined 表示沒有權限
+    if (!permissionItem) {
+      switch (target) {
+        case "FabricMesh":
+          break;
+        default:
+          console.log("沒有定義的權限碼");
+          el.style.display = "none";
+      }
+    }
   }
 };
