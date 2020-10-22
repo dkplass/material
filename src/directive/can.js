@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // TODO: 必須用API動態取回權限清單
 /*
 const permissionsList = [
@@ -50,9 +51,9 @@ const permissionsList = [
 
 export default {
   bind: function(el, binding, vnode) {
-    console.log(el);
-    console.log(binding);
-    console.log(vnode);
+    // console.log(el);
+    // console.log(binding);
+    // console.log(vnode);
 
     // FIXME: 處理 user null
     const storedData = JSON.parse(localStorage.getItem("vuex")) || {};
@@ -63,21 +64,22 @@ export default {
     if (storedData.User && storedData.User.user) {
       permissions = storedData.User.user.MemberLocations;
     }
-    console.log(permissions);
+    // console.log(permissions);
 
     const target = binding.value;
-    console.log(target);
+    // console.log(target);
 
     // TODO: target 核對 permissions，不符合的隱藏或disable
     const permissionItem = permissions.find(
       p => p.LocationClass.toLowerCase() === target.toLowerCase()
     );
-    console.log(permissionItem);
+    // console.log(permissionItem);
 
     // undefined 表示沒有權限
     if (!permissionItem) {
       switch (target) {
-        case "FabricMesh":
+        case "ModelFileDownload":
+          el.disabled = true;
           break;
         default:
           console.log("沒有定義的權限碼");
