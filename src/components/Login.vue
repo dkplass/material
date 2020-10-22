@@ -65,7 +65,6 @@ export default {
       return this.$api.v1.users
         .detail()
         .then(response => {
-          console.log(response);
           return response.data;
         })
         .catch(error => {

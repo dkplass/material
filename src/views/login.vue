@@ -10,16 +10,6 @@
         </b-form>
       </div>
     </div>
-    <!-- <form>
-      <input type="text" v-model="member.MemberNo" />
-      <input type="text" v-model="member.MemberPassWord" />
-      <button v-can="'submit'" @click="login">Submit</button>
-    </form>
-    <br />
-    <button @click="logout">logout</button>
-
-    <br />
-    <button @click="isauth">isauth</button> -->
   </div>
 </template>
 
@@ -61,7 +51,6 @@ export default {
       return this.$api.v1.users
         .detail()
         .then(response => {
-          console.log(response);
           return response.data;
         })
         .catch(error => {
