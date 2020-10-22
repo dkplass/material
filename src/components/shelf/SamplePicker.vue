@@ -30,6 +30,8 @@
 </template>
 
 <script>
+import { isAbleToRead } from "@/utils/hasAuthenticate";
+
 // TODO: 父層sample元件需傳入sampleno以查詢底下有哪些色彩可用
 export default {
   name: "SamplePicker",
@@ -46,7 +48,11 @@ export default {
   created() {
     this.generateData();
   },
-  computed: {},
+  computed: {
+    modelColorProcessIsabled() {
+      return isAbleToRead("ModelColorProcess");
+    }
+  },
   methods: {
     generateData() {
       // 暫時組成假資料，遇到YL-O001、YL-O002、其他
@@ -153,6 +159,7 @@ export default {
       this.palettes = temp;
     },
     openPicker() {
+      if (this.modelColorProcessIsabled === false) return;
       this.active = !this.active;
     },
     classActive(color = "") {
