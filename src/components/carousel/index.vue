@@ -53,6 +53,9 @@ export default {
     fabricMeshIsabled() {
       return isAbleToRead("FabricMesh");
     },
+    sampleDetailPageIsabled() {
+      return isAbleToRead("SampleDetailPage");
+    },
     countInterval() {
       let time = 0;
       const windowWidth = window.innerWidth;
@@ -93,6 +96,8 @@ export default {
   created() {},
   methods: {
     displaySample() {
+      if (this.sampleDetailPageIsabled === false) return;
+
       this.isHover = false;
 
       this.$emit("displaySample");

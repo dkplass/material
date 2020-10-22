@@ -254,15 +254,19 @@ export default {
       // 控制在特定slide position會有特定功能
       // 在3D view位置關閉觸控滑動功能、顯示樣品選擇工具列
       const _swiper = this.swiper;
-      const viewerSwipeClassList = this.$refs.viewerSwipe.$el.classList;
+      const vm = this;
 
-      if (viewerSwipeClassList.contains("swiper-slide-active")) {
-        _swiper.allowTouchMove = true;
-        this.activeColorPickerPanel = false;
-      } else {
-        _swiper.allowTouchMove = false;
-        this.activeColorPickerPanel = true;
-      }
+      this.$nextTick(() => {
+        const viewerSwipeClassList = vm.$refs.viewerSwipe.$el.classList;
+
+        if (viewerSwipeClassList.contains("swiper-slide-active")) {
+          _swiper.allowTouchMove = false;
+          vm.activeColorPickerPanel = true;
+        } else {
+          _swiper.allowTouchMove = true;
+          vm.activeColorPickerPanel = false;
+        }
+      });
     },
     displayModel(model) {
       this.modelObject = model;
