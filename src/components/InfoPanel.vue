@@ -10,7 +10,7 @@
             <span>Sample No.：{{ data.SampleNo }}</span>
             <span>Item No.：{{ data.ItemNo }}</span>
             <span>Description：{{ data.SampleName }}</span>
-            <!-- <span>Price：{{ suggestPrice }}</span> -->
+            <span>Price：{{ suggestPrice }}</span>
           </div>
           <!-- 加入最愛功能 -->
           <ToolBar v-show="true" :data="data"></ToolBar>
@@ -120,6 +120,9 @@ export default {
     tagListIsabled() {
       return isAbleToRead("TagList");
     },
+    costPriceIsabled() {
+      return isAbleToRead("CostPrice");
+    },
     badgeList() {
       /**
        * 標籤列表
@@ -145,6 +148,8 @@ export default {
     },
     suggestPrice() {
       if (!this.data) return "";
+
+      if (this.costPriceIsabled === false) return "- -";
 
       const _data = this.data;
       const currNo = _data.CurrNo ? _data.CurrNo : "";
