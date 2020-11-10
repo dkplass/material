@@ -23,6 +23,7 @@ import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
 export default {
   name: "ModelViewer",
   props: {
+    data: Object,
     modelObject: String,
     colorPalette: Object
   },
@@ -78,8 +79,8 @@ export default {
     let vm = this;
     setTimeout(() => {
       vm.init();
-      vm.loadGLTF();
-      // vm.loadFBX();
+      // vm.loadGLTF();
+      vm.loadFBX();
     }, 3000);
 
     this.$nextTick(() => {
@@ -163,7 +164,7 @@ export default {
         const loader = new FBXLoader();
 
         loader.load(
-          "https://materialballfile.blob.core.windows.net/material/模型/YL-O009/Bag_BA5566.fbx",
+          "https://materialballfile.blob.core.windows.net/material/模型/M0545/Bag_BA5566.fbx",
           fbx => {
             const scene = fbx;
 
@@ -329,10 +330,11 @@ export default {
     updateMaterialTexture() {
       if (!this.colorPalette || this.colorPalette.imagePath === "") return;
 
+      const sampleNo = this.data.SampleNo;
+
       this.textureLoaded = true;
 
-      const basicPath =
-        "https://materialballfile.blob.core.windows.net/material/模型/YL-O009/texture/";
+      const basicPath = `https://materialballfile.blob.core.windows.net/material/模型/M0545/${sampleNo}/`;
 
       const textures = {
         map: {
@@ -340,15 +342,15 @@ export default {
           value: null
         },
         normalMap: {
-          url: `Bag_BA5566_game_BA5566_Body_Normal.png`,
+          url: `Bag_BA5566_${sampleNo}_Normal.png`,
           value: null
         },
         roughnessMap: {
-          url: `Bag_BA5566_game_BA5566_Body_Roughness.png`,
+          url: `Bag_BA5566_${sampleNo}_Roughness.png`,
           value: null
         },
         metalnessMap: {
-          url: `Bag_BA5566_game_BA5566_Body_Metallic.png`,
+          url: `Bag_BA5566_${sampleNo}_Metallic.png`,
           value: null
         }
       };

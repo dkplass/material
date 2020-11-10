@@ -54,6 +54,7 @@
           ></model-viewer> -->
           <ModelViewer
             v-if="activeColorPickerPanel"
+            :data="data"
             :modelObject="modelObject"
             :colorPalette="colorPalette"
           ></ModelViewer>

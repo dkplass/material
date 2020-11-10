@@ -79,7 +79,7 @@ export default {
       modelSets: [
         {
           thumbImage: "model_1.png",
-          model: "PBR_TestBox.obj"
+          model: "Bag_BA5566.fbx"
         },
         {
           thumbImage: "model_2.png",

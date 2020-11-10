@@ -5,10 +5,15 @@
     </div>
     <div class="picker-selector-bar" :class="{ active: active }">
       <!-- <span
-        class="color-dot pink"
-        data-color="pink"
-        :class="{ active: selectPalette === 'pink' }"
-        @click="select"
+        v-for="(palette, index) in palettes"
+        :key="index"
+        class="color-dot"
+        :data-color="palette.color"
+        :class="[{ active: classActive(palette.color) }, `${palette.color}`]"
+        :style="{
+          backgroundImage: `url(${palette.imageThumb})`
+        }"
+        @click="select($event, palette)"
       ></span> -->
 
       <!-- :style="{
@@ -21,7 +26,7 @@
         :data-color="palette.color"
         :class="[{ active: classActive(palette.color) }, `${palette.color}`]"
         :style="{
-          backgroundImage: `url(${palette.imageThumb})`
+          backgroundColor: `${palette.color}`
         }"
         @click="select($event, palette)"
       ></span>
@@ -61,100 +66,135 @@ export default {
       */
       // https://materialballfile.blob.core.windows.net/material/模型基本色卡/YL-O001/YL_O001_01_PBR_Base_Color_12-0824TCX.png
       const sampleNumber = this.data.SampleNo;
-      const path = `https://materialballfile.blob.core.windows.net/material/模型基本色卡/${sampleNumber}`;
+      const path = `https://materialballfile.blob.core.windows.net/material/模型/M0545/${sampleNumber}`;
       const temp = [];
 
-      if (sampleNumber === "YL-O001") {
-        temp[0] = {
-          color: "0824TCX",
-          imagePath: `Bag_BA5566_game_BA5566_Body_BaseColor_7402C.png`,
-          imageThumb: `${path}/thumb/YL_O001_01_PBR_Base_Color_12-0824TCX.png`
-        };
+      // if (sampleNumber === "YL-O001") {
+      //   temp[0] = {
+      //     color: "0824TCX",
+      //     imagePath: `Bag_BA5566_game_BA5566_Body_BaseColor_7402C.png`,
+      //     imageThumb: `${path}/thumb/YL_O001_01_PBR_Base_Color_12-0824TCX.png`
+      //   };
 
-        temp[1] = {
-          color: "1058TCX",
-          imagePath: `Bag_BA5566_game_BA5566_Body_BaseColor_1375C.png`,
-          imageThumb: `${path}/thumb/YL_O001_01_PBR_Base_Color_15-1058TCX.png`
-        };
+      //   temp[1] = {
+      //     color: "1058TCX",
+      //     imagePath: `Bag_BA5566_game_BA5566_Body_BaseColor_1375C.png`,
+      //     imageThumb: `${path}/thumb/YL_O001_01_PBR_Base_Color_15-1058TCX.png`
+      //   };
 
-        temp[2] = {
-          color: "0636TCX",
-          imagePath: `Bag_BA5566_game_BA5566_Body_BaseColor_7503C.png`,
-          imageThumb: `${path}/thumb/YL_O001_01_PBR_Base_Color_17-0636TCX.png`
-        };
+      //   temp[2] = {
+      //     color: "0636TCX",
+      //     imagePath: `Bag_BA5566_game_BA5566_Body_BaseColor_7503C.png`,
+      //     imageThumb: `${path}/thumb/YL_O001_01_PBR_Base_Color_17-0636TCX.png`
+      //   };
 
-        temp[3] = {
-          color: "4034TCX",
-          imagePath: `Bag_BA5566_game_BA5566_Body_BaseColor_2152C.png`,
-          imageThumb: `${path}/thumb/YL_O001_01_PBR_Base_Color_18-4034TCX.png`
-        };
+      //   temp[3] = {
+      //     color: "4034TCX",
+      //     imagePath: `Bag_BA5566_game_BA5566_Body_BaseColor_2152C.png`,
+      //     imageThumb: `${path}/thumb/YL_O001_01_PBR_Base_Color_18-4034TCX.png`
+      //   };
 
-        temp[4] = {
-          color: "2434TCX",
-          imagePath: `Bag_BA5566_game_BA5566_Body_BaseColor_675C.png`,
-          imageThumb: `${path}/thumb/YL_O001_01_PBR_Base_Color_19-2434TCX.png`
-        };
-      } else if (sampleNumber === "YL-O002") {
-        temp[0] = {
-          color: "0824TCX",
-          imagePath: `${path}/YL_O002_01_PBR_Base_Color_12-0824TCX.png`,
-          imageThumb: `${path}/thumb/YL_O002_01_PBR_Base_Color_12-0824TCX.png`
-        };
+      //   temp[4] = {
+      //     color: "2434TCX",
+      //     imagePath: `Bag_BA5566_game_BA5566_Body_BaseColor_675C.png`,
+      //     imageThumb: `${path}/thumb/YL_O001_01_PBR_Base_Color_19-2434TCX.png`
+      //   };
+      // } else if (sampleNumber === "YL-O002") {
+      //   temp[0] = {
+      //     color: "0824TCX",
+      //     imagePath: `${path}/YL_O002_01_PBR_Base_Color_12-0824TCX.png`,
+      //     imageThumb: `${path}/thumb/YL_O002_01_PBR_Base_Color_12-0824TCX.png`
+      //   };
 
-        temp[1] = {
-          color: "1058TCX",
-          imagePath: `${path}/YL_O002_01_PBR_Base_Color_15-1058TCX.png`,
-          imageThumb: `${path}/thumb/YL_O002_01_PBR_Base_Color_15-1058TCX.png`
-        };
+      //   temp[1] = {
+      //     color: "1058TCX",
+      //     imagePath: `${path}/YL_O002_01_PBR_Base_Color_15-1058TCX.png`,
+      //     imageThumb: `${path}/thumb/YL_O002_01_PBR_Base_Color_15-1058TCX.png`
+      //   };
 
-        temp[2] = {
-          color: "0636TCX",
-          imagePath: `${path}/YL_O002_01_PBR_Base_Color_17-0636TCX.png`,
-          imageThumb: `${path}/thumb/YL_O002_01_PBR_Base_Color_17-0636TCX.png`
-        };
+      //   temp[2] = {
+      //     color: "0636TCX",
+      //     imagePath: `${path}/YL_O002_01_PBR_Base_Color_17-0636TCX.png`,
+      //     imageThumb: `${path}/thumb/YL_O002_01_PBR_Base_Color_17-0636TCX.png`
+      //   };
 
-        temp[3] = {
-          color: "4034TCX",
-          imagePath: `${path}/YL_O002_01_PBR_Base_Color_18-4034TCX.png`,
-          imageThumb: `${path}/thumb/YL_O002_01_PBR_Base_Color_18-4034TCX.png`
-        };
+      //   temp[3] = {
+      //     color: "4034TCX",
+      //     imagePath: `${path}/YL_O002_01_PBR_Base_Color_18-4034TCX.png`,
+      //     imageThumb: `${path}/thumb/YL_O002_01_PBR_Base_Color_18-4034TCX.png`
+      //   };
 
-        temp[4] = {
-          color: "2434TCX",
-          imagePath: `${path}/YL_O002_01_PBR_Base_Color_19-2434TCX.png`,
-          imageThumb: `${path}/thumb/YL_O002_01_PBR_Base_Color_19-2434TCX.png`
-        };
-      } else {
-        temp[0] = {
-          color: "red",
-          imagePath: "",
-          imageThumb: ""
-        };
+      //   temp[4] = {
+      //     color: "2434TCX",
+      //     imagePath: `${path}/YL_O002_01_PBR_Base_Color_19-2434TCX.png`,
+      //     imageThumb: `${path}/thumb/YL_O002_01_PBR_Base_Color_19-2434TCX.png`
+      //   };
+      // } else {
+      //   temp[0] = {
+      //     color: "red",
+      //     imagePath: "",
+      //     imageThumb: ""
+      //   };
 
-        temp[1] = {
-          color: "pink",
-          imagePath: "",
-          imageThumb: ""
-        };
+      //   temp[1] = {
+      //     color: "pink",
+      //     imagePath: "",
+      //     imageThumb: ""
+      //   };
 
-        temp[2] = {
-          color: "green",
-          imagePath: "",
-          imageThumb: ""
-        };
+      //   temp[2] = {
+      //     color: "green",
+      //     imagePath: "",
+      //     imageThumb: ""
+      //   };
 
-        temp[3] = {
-          color: "blue",
-          imagePath: "",
-          imageThumb: ""
-        };
+      //   temp[3] = {
+      //     color: "blue",
+      //     imagePath: "",
+      //     imageThumb: ""
+      //   };
 
-        temp[4] = {
-          color: "orange",
-          imagePath: "",
-          imageThumb: ""
-        };
-      }
+      //   temp[4] = {
+      //     color: "orange",
+      //     imagePath: "",
+      //     imageThumb: ""
+      //   };
+      // }
+
+      temp[0] = {
+        // color: "0824TCX",
+        color: "#FAE199",
+        imagePath: `Bag_BA5566_${sampleNumber}_BaseColor_7402C.png`,
+        imageThumb: `${path}/thumb/YL_O001_01_PBR_Base_Color_12-0824TCX.png`
+      };
+
+      temp[1] = {
+        // color: "1058TCX",
+        color: "#FC9E21",
+        imagePath: `Bag_BA5566_${sampleNumber}_BaseColor_1375C.png`,
+        imageThumb: `${path}/thumb/YL_O001_01_PBR_Base_Color_15-1058TCX.png`
+      };
+
+      temp[2] = {
+        // color: "0636TCX",
+        color: "#857946",
+        imagePath: `Bag_BA5566_${sampleNumber}_BaseColor_7503C.png`,
+        imageThumb: `${path}/thumb/YL_O001_01_PBR_Base_Color_17-0636TCX.png`
+      };
+
+      temp[3] = {
+        // color: "4034TCX",
+        color: "#0F3B53",
+        imagePath: `Bag_BA5566_${sampleNumber}_BaseColor_2152C.png`,
+        imageThumb: `${path}/thumb/YL_O001_01_PBR_Base_Color_18-4034TCX.png`
+      };
+
+      temp[4] = {
+        // color: "2434TCX",
+        color: "#9E2C6A",
+        imagePath: `Bag_BA5566_${sampleNumber}_BaseColor_675C.png`,
+        imageThumb: `${path}/thumb/YL_O001_01_PBR_Base_Color_19-2434TCX.png`
+      };
 
       this.palettes = temp;
     },
