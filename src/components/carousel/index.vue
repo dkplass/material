@@ -70,7 +70,7 @@ export default {
       const path = "https://materialballfile.blob.core.windows.net/material/網頁檔案";
       const list = [];
 
-      for (let i = 1; i <= 3; i++) {
+      for (let i = 1; i <= 2; i++) {
         if (this.fabricMeshIsabled === false && i === 2) continue;
         list[i - 1] = `${path}/${this.data.SampleNo}/${this.data.SampleNo}-0${i}.png`;
       }

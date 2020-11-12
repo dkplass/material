@@ -1,6 +1,7 @@
 <template>
   <div id="scene-container" ref="sceneContainer">
     <div id="hint-message" v-if="textureLoaded">Applying Texture ...</div>
+    <div id="hint-message" v-if="initTextureLoaded">Initiating Texture ...</div>
     <transition name="fade">
       <div id="loader-wrapper" v-if="glbLoadingPercent < 101">
         <div id="percent">{{ glbLoadingPercent }}%</div>
@@ -31,6 +32,7 @@ export default {
     return {
       glbLoadingPercent: 0,
       textureLoaded: false,
+      initTextureLoaded: false,
 
       container: null,
       scene: null,
@@ -248,6 +250,7 @@ export default {
       this.content = object;
 
       // this.updateEnvironmentTexture();
+      this.initMaterialTexture();
       this.updateLights();
       this.updateMaterialTexture();
     },
@@ -327,8 +330,92 @@ export default {
         );
       });
     },
+    initMaterialTexture() {
+      this.initTextureLoaded = true;
+
+      const sampleNo = this.data.SampleNo;
+      const basicPath = `https://materialballfile.blob.core.windows.net/material/模型/M0545/${sampleNo}/`;
+
+      const textures = {
+        map: {
+          url: `Bag_BA5566_${sampleNo}_BaseColor.png`,
+          value: null
+        },
+        normalMap: {
+          url: `Bag_BA5566_${sampleNo}_Normal.png`,
+          value: null
+        },
+        roughnessMap: {
+          url: `Bag_BA5566_${sampleNo}_Roughness.png`,
+          value: null
+        },
+        metalnessMap: {
+          url: `Bag_BA5566_${sampleNo}_Metallic.png`,
+          value: null
+        }
+      };
+
+      const texturePromises = [];
+
+      const manager = new Three.LoadingManager();
+
+      manager.setURLModifier(url => {
+        return `${basicPath}${url}`;
+      });
+
+      const loader = new Three.TextureLoader(manager);
+
+      for (let key in textures) {
+        texturePromises.push(
+          new Promise((resolve, reject) => {
+            const entry = textures[key];
+            const url = entry.url;
+
+            loader.load(
+              url,
+              texture => {
+                entry.value = texture;
+                resolve(entry);
+              },
+              undefined,
+              reject
+            );
+          })
+        );
+      }
+
+      Promise.all(texturePromises).then(() => {
+        const material = new Three.MeshStandardMaterial({
+          color: 0x7f7f7f,
+          map: textures.map.value,
+          normalMap: textures.normalMap.value,
+          roughnessMap: textures.roughnessMap.value,
+          metalnessMap: textures.metalnessMap.value,
+          metalness: 1
+        });
+
+        this.content.traverse(o => {
+          if (o.isMesh) {
+            o.castShadow = true;
+            o.receiveShadow = true;
+            o.material = material;
+            o.material.map.encoding = Three.sRGBEncoding;
+            o.material.map.format = Three.RGBFormat;
+            o.material.normalMap.format = Three.RGBFormat;
+            o.material.roughnessMap.format = Three.RGBFormat;
+            o.material.metalnessMap.format = Three.RGBFormat;
+            o.material.needsUpdate = true;
+          }
+        });
+
+        this.scene.add(this.content);
+
+        this.initTextureLoaded = false;
+      });
+    },
     updateMaterialTexture() {
       if (!this.colorPalette || this.colorPalette.imagePath === "") return;
+      console.log(this.colorPalette);
 
       const sampleNo = this.data.SampleNo;
 
