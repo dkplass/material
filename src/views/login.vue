@@ -31,21 +31,28 @@ export default {
     async login(e) {
       e.preventDefault();
 
-      await this.$api.auth.SignIn(this.member).then(response => {
-        const res = response.data;
-        const token = res.access_token;
+      const result = await this.$api.auth.SignIn(this.member).then(response => response.data);
 
+      if (result === "登入失敗") {
+        this.$bvModal.msgBoxOk("Login fail.", {
+          buttonSize: "sm",
+          centered: true,
+          size: "sm",
+          footerClass: "border-top-0",
+          bodyClass: "text-align"
+        });
+      } else {
         this.$store.dispatch("Authenticate/setAuth", {
-          token: token,
+          token: result.access_token,
           isLogin: true
         });
-      });
 
-      const user = await this.getUser();
+        const user = await this.getUser();
 
-      this.$store.dispatch("User/setUser", user);
+        this.$store.dispatch("User/setUser", user);
 
-      this.$router.push("main");
+        this.$router.push("main");
+      }
     },
     getUser() {
       return this.$api.v1.users
