@@ -3,6 +3,8 @@
 
 [材質球](https://tw.yawliamy.com/materialball/main)
 
+帳號：T001 / 密碼：1234
+
 ## Project setup
 ```
 npm install
